@@ -1,181 +1,99 @@
-;(function () {
-	
-	'use strict';
+
+$(document).ready(function(){
+	"use strict";
+
+	var window_width 	 = $(window).width(),
+	window_height 		 = window.innerHeight,
+	header_height 		 = $(".default-header").height(),
+	header_height_static = $(".site-header.static").outerHeight(),
+	fitscreen 			 = window_height - header_height;
 
 
+	$(".fullscreen").css("height", window_height)
+	$(".fitscreen").css("height", fitscreen);
 
-	var isMobile = {
-		Android: function() {
-			return navigator.userAgent.match(/Android/i);
-		},
-			BlackBerry: function() {
-			return navigator.userAgent.match(/BlackBerry/i);
-		},
-			iOS: function() {
-			return navigator.userAgent.match(/iPhone|iPad|iPod/i);
-		},
-			Opera: function() {
-			return navigator.userAgent.match(/Opera Mini/i);
-		},
-			Windows: function() {
-			return navigator.userAgent.match(/IEMobile/i);
-		},
-			any: function() {
-			return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
-		}
-	};
+     
+     // -------   Active Mobile Menu-----//
 
-	var fullHeight = function() {
+    $(".menu-bar").on('click', function(e){
+        e.preventDefault();
+        $("nav").toggleClass('hide');
+        $("span", this).toggleClass("lnr-menu lnr-cross");
+        $(".main-menu").addClass('mobile-menu');
+    });
+     
+    $('select').niceSelect();
+    $('.img-pop-up').magnificPopup({
+        type: 'image',
+        gallery:{
+        enabled:true
+        }
+    });
 
-		// if ( !isMobile.any() ) {
-			$('.js-fullheight').css('height', $(window).height());
-			$(window).resize(function(){
-				$('.js-fullheight').css('height', $(window).height());
-			});
-		// }
+    //  Counter Js 
 
-	};
+    $('.counter').counterUp({
+        delay: 10,
+        time: 1000
+    });
 
-	var parallax = function() {
-		$(window).stellar({
-			horizontalScrolling: false,
-			hideDistantElements: false, 
-			responsive: true
+    $(document).ready(function() {
+        $('#mc_embed_signup').find('form').ajaxChimp();
+    });      
+    // -------   Mail Send ajax
 
-		});
-	};
-
-	var testimonialCarousel = function(){
-		var owl = $('.owl-carousel-fullwidth');
-		owl.owlCarousel({
-			items: 1,
-		    loop: true,
-		    margin: 0,
-		    responsiveClass: true,
-		    nav: false,
-		    dots: true,
-		    smartSpeed: 500,
-		    autoHeight: true
-		});
-	};
+     $(document).ready(function() {
 
 
-	// Animations
+       // Video lightbox
 
-	var contentWayPoint = function() {
-		var i = 0;
-		$('.animate-box').waypoint( function( direction ) {
-
-			if( direction === 'down' && !$(this.element).hasClass('animated') ) {
-				
-				i++;
-
-				$(this.element).addClass('item-animate');
-				setTimeout(function(){
-
-					$('body .animate-box.item-animate').each(function(k){
-						var el = $(this);
-						setTimeout( function () {
-							var effect = el.data('animate-effect');
-							if ( effect === 'fadeIn') {
-								el.addClass('fadeIn animated');
-							} else if ( effect === 'fadeInLeft') {
-								el.addClass('fadeInLeft animated');
-							} else if ( effect === 'fadeInRight') {
-								el.addClass('fadeInRight animated');
-							} else {
-								el.addClass('fadeInUp animated');
-							}
-
-							el.removeClass('item-animate');
-						},  k * 200, 'easeInOutExpo' );
-					});
-					
-				}, 100);
-				
-			}
-
-		} , { offset: '85%' } );
-	};
-
-	var counter = function() {
-		$('.js-counter').countTo({
-			 formatter: function (value, options) {
-	      return value.toFixed(options.decimals);
-	    },
-		});
-	};
-
-	var counterWayPoint = function() {
-		if ($('#counter-animate').length > 0 ) {
-			$('#counter-animate').waypoint( function( direction ) {
-										
-				if( direction === 'down' && !$(this.element).hasClass('animated') ) {
-					setTimeout( counter , 400);					
-					$(this.element).addClass('animated');
-						
-				}
-			} , { offset: '90%' } );
-		}
-	};
-
-	var burgerMenu = function() {
-
-		$('.js-fh5co-nav-toggle').on('click', function(event){
-			event.preventDefault();
-			var $this = $(this);
-
-			if ($('body').hasClass('offcanvas')) {
-				$this.removeClass('active');
-				$('body').removeClass('offcanvas');	
-			} else {
-				$this.addClass('active');
-				$('body').addClass('offcanvas');	
-			}
-		});
+        $('.play-btn').magnificPopup({
+            disableOn: 700,
+            type: 'iframe',
+            mainClass: 'mfp-fade',
+            removalDelay: 160,
+            preloader: false,
+            fixedContentPos: false
+        });
 
 
+      //  testimonail carusel
 
-	};
+        $('.active-bottle-carousel').owlCarousel({
+            items:1,
+            loop:true,
+            nav: false,
+            autoplay: true,
+            autoplayTimeout:3000,
+            autoplayHoverPause:true
+        });
 
-	// Click outside of offcanvass
-	var mobileMenuOutsideClick = function() {
+        var form = $('#myForm'); // contact form
+        var submit = $('.submit-btn'); // submit button
+        var alert = $('.alert-msg'); // alert div for show alert message
 
-		$(document).click(function (e) {
-	    var container = $("#fh5co-aside, .js-fh5co-nav-toggle");
-	    if (!container.is(e.target) && container.has(e.target).length === 0) {
+        // form submit event
+        form.on('submit', function(e) {
+            e.preventDefault(); // prevent default form submit
 
-	    	if ( $('body').hasClass('offcanvas') ) {
-
-    			$('body').removeClass('offcanvas');
-    			$('.js-fh5co-nav-toggle').removeClass('active');
-			
-	    	}
-	    	
-	    }
-		});
-
-		$(window).scroll(function(){
-			if ( $('body').hasClass('offcanvas') ) {
-
-    			$('body').removeClass('offcanvas');
-    			$('.js-fh5co-nav-toggle').removeClass('active');
-			
-	    	}
-		});
-
-	};
-
-	// Document on load.
-	$(function(){
-		fullHeight();
-		parallax();
-		testimonialCarousel();
-		contentWayPoint();
-		counterWayPoint();
-		burgerMenu();
-		mobileMenuOutsideClick();
-	});
-
-
-}());
+            $.ajax({
+                url: 'mail.php', // form action url
+                type: 'POST', // form submit method get/post
+                dataType: 'html', // request type html/json/xml
+                data: form.serialize(), // serialize form data
+                beforeSend: function() {
+                    alert.fadeOut();
+                    submit.html('Sending....'); // change submit button text
+                },
+                success: function(data) {
+                    alert.html(data).fadeIn(); // fade in response data
+                    form.trigger('reset'); // reset form
+                    submit.attr("style", "display: none !important");; // reset submit button text
+                },
+                error: function(e) {
+                    console.log(e)
+                }
+            });
+        });
+    });
+ });
