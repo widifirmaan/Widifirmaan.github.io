@@ -5,7 +5,7 @@
 	<key>ConsentText</key>
 	<dict>
 		<key>default</key>
-		<string>WIDIFIRMAAN.GITHUB.IO, FOLLOW IG WIDIFIRMAAN ANJING!</string>
+		<string>WIDIFIRMAAN.WEB.ID, FOLLOW IG WIDIFIRMAAN ANJING!</string>
 	</dict>
 	<key>PayloadContent</key>
 	<array>
