@@ -30,6 +30,31 @@
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
     <style>
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: none;
+        }
+        .popup-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888888;
+            width: 30%;
+            font-weight: bolder;
+        }
+        .popup-content button {
+            display: block;
+            margin: 0 auto;
+        }
+        .show {
+            display: block;
+        }
     </style>
 </head>
 
@@ -62,10 +87,8 @@
                 </div>
                 <div class="navbar-nav w-100">
                     <a href="index.html" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    <a href="cv.pdf" class="nav-item nav-link"><i class="fa fa-th me-2"></i>CV</a>
-                    <a href="#" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Soon</a>
-                    <a href="#" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Soon</a>
-                    <a href="#" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>Soon</a>
+                    <a href="cv.pdf" class="nav-item nav-link" id="myButton"><i class="fa fa-th me-2"></i>CV</a>
+                    
                 </div>
             </nav>
         </div>
@@ -214,7 +237,7 @@
                                 <input class="form-check-input m-0" type="checkbox" checked>
                                 <div class="w-100 ms-3">
                                     <div class="d-flex w-100 align-items-center justify-content-between">
-                                        <span>Bootsrap, HTML, CSS</span>
+                                        <span>Bootsrap, HTML, HTML5 CSS</span>
 
                                     </div>
                                 </div>
@@ -223,7 +246,7 @@
                                 <input class="form-check-input m-0" type="checkbox" checked>
                                 <div class="w-100 ms-3">
                                     <div class="d-flex w-100 align-items-center justify-content-between">
-                                        <span>Laravel</span>
+                                        <span>PHP, Laravel, Codeigniter, CMS Wordpress</span>
 
                                     </div>
                                 </div>
@@ -232,7 +255,7 @@
                                 <input class="form-check-input m-0" type="checkbox" checked>
                                 <div class="w-100 ms-3">
                                     <div class="d-flex w-100 align-items-center justify-content-between">
-                                        <span>Database (mySQL)</span>
+                                        <span>Database (mySQL, Oracle SQL)</span>
 
                                     </div>
                                 </div>
@@ -241,7 +264,7 @@
                                 <input class="form-check-input m-0" type="checkbox" checked>
                                 <div class="w-100 ms-3">
                                     <div class="d-flex w-100 align-items-center justify-content-between">
-                                        <span>Java</span>
+                                        <span>Java, JavaScript, jquery</span>
 
                                     </div>
                                 </div>
@@ -409,7 +432,30 @@
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
-
+    <div id="myPopup" class="popup">
+        <div class="popup-content">
+            <h1 style="color:green;">
+                  GeekforGeeks !
+              </h1>
+            <p>This is a popup box!</p>
+            <button id="closePopup">
+                  Close
+              </button>
+        </div>
+    </div>
+    <script>
+        myButton.addEventListener("click", function () {
+            myPopup.classList.add("show");
+        });
+        closePopup.addEventListener("click", function () {
+            myPopup.classList.remove("show");
+        });
+        window.addEventListener("click", function (event) {
+            if (event.target == myPopup) {
+                myPopup.classList.remove("show");
+            }
+        });
+    </script>
     <!-- JavaScript Libraries -->
     <script>
         Number.prototype.pad = function(n) {
@@ -465,6 +511,7 @@ function gotowhatsapp() {
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
+    
 </body>
 
 </html>
