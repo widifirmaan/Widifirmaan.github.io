@@ -7,9 +7,6 @@
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <meta name="keywords" content="">
 
   <!-- Favicon -->
   <link rel="apple-touch-icon" sizes="180x180" href="./assets/images/favicon/apple-touch-icon.png">
@@ -25,7 +22,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&family=Homemade+Apple&display=swap"
     rel="stylesheet">
-
+    
   <!-- Vendor CSS -->
   <link rel="stylesheet" href="./assets/css/libs.bundle.css" />
 
@@ -33,26 +30,274 @@
   <link rel="stylesheet" href="./assets/css/theme.bundle.css" />
 
   <!-- Fix for custom scrollbar if JS is disabled-->
-  <noscript>
-    <style>
-      /**
-          * Reinstate scrolling for non-JS clients
-          */
-      .simplebar-content-wrapper {
-        overflow: auto;
-      }
-    </style>
-  </noscript>
-
+  
   <!-- Page Title -->
   <title>PORTOFOLIO WIDI FIRMANS</title>
+<style>
+body {
+    overflow: hidden;
+    overflow-y: visible;
+    }
+#main-page {
+    opacity: 0;
+    transform: scale(0);
+    transition: 1s ease opacity,1s ease transform;
+}
+#bgload{
+
+    display: block;
+  top: 0%;
+  width: 100vw;
+  height: 60vw;
+    opacity: 1;
+    transform: scale(1);
+    transition: 1s ease opacity,1s ease transform;
+    
+}
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;500&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+
+
+
+.greeting {
+  position: relative;
+  top: 8.6vmin;
+  animation: white-out 5s infinite;
+}
+
+.en {
+  color: #fa8231;
+}
+
+@keyframes move {
+  25% {
+    transform: translatey(-5.8vmin);
+    opacity: 1;
+  }
+  50% {
+    transform: translatey(-11vmin);
+  }
+  75% {
+    transform: translatey(-16.5vmin);
+  }
+}
+#center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -180px;
+  margin-left: -75px;
+  width: 150px;
+  height: 80px;
+  
+  color: #fff;
+  text-align: center;
+  -webkit-font-smoothing: antialiased;
+}
+#loader {
+    display: block;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    width: 150px;
+    height: 150px;
+    margin: -75px 0 0 -75px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #9370DB;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+#loader:before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #BA55D3;
+    -webkit-animation: spin 3s linear infinite;
+    animation: spin 3s linear infinite;
+}
+#loader:after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-top-color: #FF00FF;
+    -webkit-animation: spin 1.5s linear infinite;
+    animation: spin 1.5s linear infinite;
+}
+@-webkit-keyframes spin {
+    0%   {
+        -webkit-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@keyframes spin {
+    0%   {
+        -webkit-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+.video-bg {
+    opacity: 0;
+    transform: scale(0);
+    transition: 1s ease opacity,1s ease transform;
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+}
+
+.video-bg::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, .3);
+  background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.video-bg iframe {
+  display: block;
+  top: 0%;
+  width: 100vw;
+  height: 56vw;
+}
+
+.contentx {
+    position: absolute;
+  top: 0%;
+  width: 100%;
+  background: rgba(0, 0, 0, .3);
+}
+
+
+.typing::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: #ffffff;
+    animation: cursorBlink 0.8s steps(3) infinite;
+}
+
+@keyframes cursorBlink {
+
+    0%,
+    75% {
+        opacity: 1;
+    }
+
+    76%,
+    100% {
+        opacity: 0;
+    }
+}
+
+.typing {
+    position: relative;
+    -webkit-box-reflect: below 1px linear-gradient(transparent, #3333);
+}
+
+.typing p {
+    position: relative;
+    color: #ffffff;
+    letter-spacing: 5px;
+    font-size: 1rem;
+    overflow: hidden;
+    margin-bottom: 0;
+    animation: type 5s steps(11) infinite;
+}
+
+@keyframes type {
+
+    0%,
+    100% {
+        width: 0px;
+    }
+
+    30%,
+    60% {
+        width: 394.09px;
+    }
+}
+
+@media(max-width: 330px) {
+    .typing h2 {
+        font-size: 3rem;
+        animation: type 5s steps(10) infinite;
+    }
+
+    @keyframes type {
+
+        0%,
+        100% {
+            width: 0px;
+        }
+
+        30%,
+        60% {
+            width: 305px;
+        }
+    }
+}
+
+
+</style>
 
 </head>
-<body class="">
-
+<body class="" id="bodys" onload="myFunction()">
+    <div id="video-bg"class="video-bg contentx">
+        <iframe src="https://www.youtube.com/embed/_vgI6sKWaEc?start=25&autoplay=1&mute=1&modestbranding&playsinline=1&loop=1&playlist=_vgI6sKWaEc&controls=0&disablekb=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <div id="bgload">
+        
+        <div id="center">
+            
+            <div id="loader" class="mt-5"></div>
+            <br/><br/>
+            <div class="typing">
+                <center><p class="mt-5">System<span style="color:white;">.<span style="color:#e06c75;">out</span>.</span><span style="color:#61afef;">println</span>("compiling code");</p></center>
+            </div>
+        </div>
+    </div>
+    <!-- <p aria-label="Loading">take a Coffee and wait my website to load up</p> -->
     <!-- Navbar -->
+  
+    <main id="main-page" class="contentx">
+        
     <nav class="navbar navbar-expand-lg navbar-dark bg-transparent border-bottom">
-        <div class="container" data-aos="fade-down" data-aos-delay="100" data-aos-duration="400">
+        <div class="container containx" data-aos="fade-down" data-aos-delay="100" data-aos-duration="400">
           <a class="navbar-brand me-10" href="#">
               <div class="f-w-10">
                   <svg viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -82,14 +327,13 @@
           </button>
         </div>
       </nav>    <!-- / Navbar-->
-
     <!-- Main Section-->
-    <section class="container ">
-        <!-- Page Content Goes Here -->            
-        
-        <!-- Hero-->
+    <!-- Hero-->
+    
+    <section class="container page-main">
+        <!-- Page Content Goes Here -->          
         <div class="row my-5 my-lg-10 pb-5 g-5">
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-8">
                 <p class="lead tracking-wide" data-aos="fade-left"><span class="display-6 me-2">👋</span> Hello, I’m</p>
                 <h1 class="display-1 mb-4 position-relative d-table">
                     <span class="d-block" data-aos="fade-right" data-aos-delay="250">Widi Firmans</span>
@@ -123,7 +367,7 @@
                 <p class="text-muted lead mb-5" data-aos="fade-left" data-aos-delay="250">Freelance & employed <br/> Web Developer</p>
                 <a href="https://www.canva.com/design/DAEvYvPgmAg/922p9ecOgPcaIdZRUIHJZg/view?utm_content=DAEvYvPgmAg&utm_campaign=designshare&utm_medium=link&utm_source=publishsharelink" class="btn btn-pseudo" data-aos="fade-up" data-aos-delay="600">Show CV</a>
             </div>
-            <div class="col-12 col-md-6 position-relative mt-10 mt-md-5 mt-lg-0">
+            <div class="col-12 col-md-4 position-relative mt-10 mt-md-5 mt-lg-0">
                 <picture class="position-relative z-index-20 d-block" data-aos="fade-left" data-aos-delay="600">
                     <img class="img-fluid" src="./assets/images/me.jpg" alt="HTML Bootstrap Template by Pixel Rocket">
                 </picture>
@@ -666,6 +910,7 @@
         <!-- /Slideout Body-->
     
     </div>
+</main>
     <!-- Slideout--><!-- / Slideout -->    <!-- / Footer-->
 
     <!-- Theme JS -->
@@ -674,6 +919,37 @@
     
     <!-- Theme JS -->
     <script src="./assets/js/theme.bundle.js"></script>
+    <script>
+        var myVar;
+        function myFunction() {
+            myVar1 = setTimeout(showPage1, 5100);
+            myVar2 = setTimeout(showPage2, 3000);
+            myVar3 = setTimeout(showPage3, 5000);
+        }
+        function showPage1() {
+            window.setTimeout(function(){
+                document.getElementById('main-page').style.opacity = 1;
+                document.getElementById('main-page').style.transform = 'scale(1)';   
+                
+            },0);
+        }
+        function showPage2() {
+            window.setTimeout(function(){
+                document.getElementById('video-bg').style.opacity = 1;
+                document.getElementById('video-bg').style.transform = 'scale(1)';
+                window.scrollTo(0, 0);
+            },0);
+        }
+        function showPage3() {
+            window.setTimeout(function(){
+                document.getElementById('bgload').style.opacity = 0;
+                document.getElementById('bgload').style.transform = 'scale(0)';
+                window.scrollTo(0, 0);   
+            },0);
+        }
+        </script>
+   
+    
 </body>
 
 </html>
