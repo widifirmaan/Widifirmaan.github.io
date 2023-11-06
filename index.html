@@ -33,18 +33,24 @@
   
   <!-- Page Title -->
   <title>PORTOFOLIO WIDI FIRMANS</title>
+  <noscript>
+    <style>
+      /**
+          * Reinstate scrolling for non-JS clients
+          */
+      .simplebar-content-wrapper {
+        overflow: auto;
+      }
+    </style>
+  </noscript>
 <style>
-body {
-    overflow: hidden;
-    overflow-y: visible;
-    }
+
 #main-page {
     opacity: 0;
     transform: scale(0);
     transition: 1s ease opacity,1s ease transform;
 }
 #bgload{
-
     display: block;
   top: 0%;
   width: 100vw;
@@ -55,14 +61,6 @@ body {
     
 }
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;500&display=swap');
-
-* {
-  margin: 0;
-  padding: 0;
-}
-
-
-
 
 .greeting {
   position: relative;
@@ -173,9 +171,9 @@ body {
     overflow: hidden;
 }
 
-.video-bg::after {
+/* .video-bg::after {
   content: '';
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   display: block;
@@ -183,7 +181,7 @@ body {
   height: 100%;
   background: rgba(0, 0, 0, .3);
   background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
-}
+} */
 
 .video-bg iframe {
   display: block;
@@ -194,9 +192,9 @@ body {
 
 .contentx {
     position: absolute;
-  top: 0%;
-  width: 100%;
-  background: rgba(0, 0, 0, .3);
+    top: 0%;
+    width: 100%;
+    background: rgba(0, 0, 0, .3);
 }
 
 
@@ -212,7 +210,6 @@ body {
 }
 
 @keyframes cursorBlink {
-
     0%,
     75% {
         opacity: 1;
@@ -249,26 +246,6 @@ body {
     30%,
     60% {
         width: 394.09px;
-    }
-}
-
-@media(max-width: 330px) {
-    .typing h2 {
-        font-size: 3rem;
-        animation: type 5s steps(10) infinite;
-    }
-
-    @keyframes type {
-
-        0%,
-        100% {
-            width: 0px;
-        }
-
-        30%,
-        60% {
-            width: 305px;
-        }
     }
 }
 
@@ -471,7 +448,7 @@ body {
                 <p>My technical specialties are Laravel, Native PHP, HTML, CSS, JavaScript, WordPress, and Static Site Generators.</p>
                 <p></p>Thank you for your time and consideration. I have attached my resume and am looking forward to meeting with you and discussing the opportunity in more detail. I can be contacted by telephone at (+62)811-290-2953 or email at w@widifirmaan.web.id. Thank you and Godbless.</p>
             </div>
-            <div class="row">
+            <div class="row pt-4">
                 <div class="col-4">
 
                 </div>
@@ -486,7 +463,7 @@ body {
         </div>        <!-- / About-->
 
         <!-- My Portfolio-->
-        <div class="py-8 portfolio">
+        <div class="portfolio">
             <div class="mb-6 py-2" data-aos="reveal-right">
                 <h3 class="display-3 lh-1"><span class="font-script d-block text-danger display-6 lh-1 ps-1">My</span> Portfolio</h3>
                 <div class="f-w-52 text-warning">
@@ -679,7 +656,7 @@ body {
 
         <!-- Skills -->
         <!-- Skills Section-->
-        <div class="py-8 skills">
+        <div class="skills">
             <div class="mb-6 py-2" data-aos="reveal-right">
                 <h3 class="display-3 lh-1"><span class="font-script d-block text-danger display-6 lh-1 ps-1">My</span> Skills</h3>
                 <div class="f-w-40 text-warning">
@@ -776,14 +753,15 @@ body {
 
         <!-- /Page Content -->
     </section>
+
     <!-- / Main Section-->
 
     <!-- Footer -->
     <!-- Footer-->
-    <footer class="container mb-10  ">
+    <footer class="container mb-10 pt-6 ">
         <h6 class="display-2 tracking-wide mb-3" data-aos="slide-up">Want to work with me?</h6>
         <p class="text-muted lead tracking-wide mb-5" data-aos="reveal-left" data-aos-delay="500">Get the ball rolling</p>
-        <a href="#" class="text-warning display-6 font-serif tracking-wide text-decoration-none" data-aos="reveal-right" data-aos-delay="1200">w@widifirmaan.web.id</a>
+        <a class="text-warning display-6 font-serif tracking-wide text-decoration-none" data-aos="reveal-right" data-aos-delay="1200">w@widifirmaan.web.id</a>
     
         <ul class="list-unstyled d-flex mt-5 mb-4" data-aos="fade-up">
             <li class="me-7"><a class="text-body text-decoration-none" href="https://www.linkedin.com/in/widi-firmans">LinkedIn</a></li>
@@ -793,6 +771,7 @@ body {
         <p class="text-muted" data-aos="fade-up">All rights reserved. © V3 2023. Template made with ❤️️ by <a href="https://github.com/widifirmaan">Widi Firmans</a></p>
     
     </footer>
+</main>
     <!-- / Footer-->
     
     <!-- Modal Imports-->
@@ -920,7 +899,7 @@ body {
         <!-- /Slideout Body-->
     
     </div>
-</main>
+
     <!-- Slideout--><!-- / Slideout -->    <!-- / Footer-->
 
     <!-- Theme JS -->
@@ -932,8 +911,8 @@ body {
     <script>
         var myVar;
         function myFunction() {
-            myVar1 = setTimeout(showPage1, 5100);
-            myVar2 = setTimeout(showPage2, 3000);
+            myVar1 = setTimeout(showPage1, 5050);
+            myVar2 = setTimeout(showPage2, 4000);
             myVar3 = setTimeout(showPage3, 5000);
         }
         function showPage1() {
