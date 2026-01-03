@@ -205,61 +205,7 @@
       </div><!-- End Section Title -->
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
-          <div class="col">
-            <div class="card h-100 shadow-sm" data-bs-toggle="modal" data-bs-target="#projectModal1">
-              <img src="assets/img/porto/dufl-tools.png" class="card-img-top">
-              <div class="card-body">
-                <h5 class="card-title">DUFL Tools</h5>
-                <p class="card-text text-muted">All in One Useful tools.</p>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card h-100 shadow-sm" data-bs-toggle="modal" data-bs-target="#projectModal2">
-              <img src="assets/img/porto/simple-pos.png" class="card-img-top">
-              <div class="card-body">
-                <h5 class="card-title">Simple POS PHP</h5>
-                <p class="card-text text-muted">Point of Sales with Barcode Scanner and Generator</p>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card h-100 shadow-sm" data-bs-toggle="modal" data-bs-target="#projectModal3">
-              <img src="assets/img/porto/omahsampah.png" class="card-img-top" alt="Project 3">
-              <div class="card-body">
-                <h5 class="card-title">Omah Sampah</h5>
-                <p class="card-text text-muted">Dashboard Trash Management System, built with PHP</p>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card h-100 shadow-sm" data-bs-toggle="modal" data-bs-target="#projectModal4">
-              <img src="assets/img/porto/excelpintar.png" class="card-img-top">
-              <div class="card-body">
-                <h5 class="card-title">Excel Pintar</h5>
-                <p class="card-text text-muted">instructional Media with Quiz and Learning</p>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card h-100 shadow-sm" data-bs-toggle="modal" data-bs-target="#projectModal5">
-              <img src="assets/img/porto/portograph.png" class="card-img-top">
-              <div class="card-body">
-                <h5 class="card-title">Portograph</h5>
-                <p class="card-text text-muted">Photographer Portfolio Template, connected to Instagram with EmbedSocial</p>
-              </div>
-            </div>
-          </div>
-          <div class="col">
-            <div class="card h-100 shadow-sm" data-bs-toggle="modal" data-bs-target="#projectModal6">
-              <img src="assets/img/porto/soon.png" class="card-img-top">
-              <div class="card-body">
-                <h5 class="card-title">Coming Soon..</h5>
-                <p class="card-text text-muted">Other Project on https://github.com/widifirmaan</p>
-              </div>
-            </div>
-          </div>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4" id="project-list">
         </div>
       </div>
       <div class="modal fade" id="projectModal1" tabindex="-1" aria-labelledby="projectModalLabel1" aria-hidden="true">
@@ -532,6 +478,41 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const projectList = document.getElementById('project-list');
+
+      fetch('/api/projects')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(projects => {
+          projectList.innerHTML = ''; // Clear existing content
+          projects.forEach((project, index) => {
+            const projectCard = `
+              <div class="col">
+                <div class="card h-100 shadow-sm" data-bs-toggle="modal" data-bs-target="#projectModal${index + 1}">
+                  <img src="${project.imageUrl}" class="card-img-top" alt="${project.name}">
+                  <div class="card-body">
+                    <h5 class="card-title">${project.name}</h5>
+                    <p class="card-text text-muted">${project.description}</p>
+                  </div>
+                </div>
+              </div>
+            `;
+            projectList.innerHTML += projectCard;
+          });
+        })
+        .catch(error => {
+            console.error('Error fetching projects:', error);
+            projectList.innerHTML = '<p class="text-danger">Could not load projects. Please try again later.</p>';
+        });
+    });
+  </script>
 
 </body>
 
