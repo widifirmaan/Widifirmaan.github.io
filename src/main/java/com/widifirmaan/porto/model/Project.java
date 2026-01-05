@@ -1,19 +1,29 @@
 package com.widifirmaan.porto.model;
 
+import java.util.List;
+
 public class Project {
 
     private Long id;
     private String name;
     private String description;
-    private String url;
-    private String imageUrl;
+    private String demoUrl;
+    private String repoUrl;
+    private List<String> imageUrls;
+    private List<String> features;
+    private List<String> techStack;
+    private String database;
 
-    public Project(Long id, String name, String description, String url, String imageUrl) {
+    public Project(Long id, String name, String description, String demoUrl, String repoUrl, List<String> imageUrls, List<String> features, List<String> techStack, String database) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.url = url;
-        this.imageUrl = imageUrl;
+        this.demoUrl = demoUrl;
+        this.repoUrl = repoUrl;
+        this.imageUrls = imageUrls;
+        this.features = features;
+        this.techStack = techStack;
+        this.database = database;
     }
 
     // Getters and setters
@@ -41,19 +51,51 @@ public class Project {
         this.description = description;
     }
 
-    public String getUrl() {
-        return url;
+    public String getDemoUrl() {
+        return demoUrl;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setDemoUrl(String demoUrl) {
+        this.demoUrl = demoUrl;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getRepoUrl() {
+        return repoUrl;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setRepoUrl(String repoUrl) {
+        this.repoUrl = repoUrl;
+    }
+
+    public List<String> getImageUrls() {
+        return imageUrls;
+    }
+
+    public void setImageUrls(List<String> imageUrls) {
+        this.imageUrls = imageUrls;
+    }
+
+    public List<String> getFeatures() {
+        return features;
+    }
+
+    public void setFeatures(List<String> features) {
+        this.features = features;
+    }
+
+    public List<String> getTechStack() {
+        return techStack;
+    }
+
+    public void setTechStack(List<String> techStack) {
+        this.techStack = techStack;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(String database) {
+        this.database = database;
     }
 }
