@@ -22,7 +22,7 @@ echo "Starting Auto-Pull Monitor on branch $BRANCH_NAME..."
 
 # Start the application initially
 echo "Starting Spring Boot application..."
-./mvnw spring-boot:run &
+mvn spring-boot:run &
 APP_PID=$!
 
 while true; do
@@ -45,7 +45,7 @@ while true; do
             wait $APP_PID 2>/dev/null
         fi
         
-        ./mvnw spring-boot:run &
+        mvn spring-boot:run &
         APP_PID=$!
     fi
 done
