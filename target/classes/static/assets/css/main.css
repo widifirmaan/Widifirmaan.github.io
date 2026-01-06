@@ -1374,6 +1374,85 @@ section,
 }
 
 /*--------------------------------------------------------------
+# Project Cards & Modals
+--------------------------------------------------------------*/
+.project-card {
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    border: 1px solid rgba(0,0,0,0.05); /* Subtle border */
+    overflow: hidden; /* For image zoom */
+}
+
+.project-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15) !important;
+    border-color: var(--accent-color);
+}
+
+.card-img-wrapper {
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+}
+
+.card-img-top {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.project-card:hover .card-img-top {
+    transform: scale(1.1); /* Slightly stronger zoom */
+}
+
+/* Modal Animation */
+.modal.fade .modal-dialog {
+    transform: scale(0.9);
+    opacity: 0;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.modal.show .modal-dialog {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.modal-content {
+    border-radius: 1rem;
+    overflow: hidden; /* Rounded corners for children */
+}
+
+.modal-footer .btn {
+    transition: transform 0.2s ease;
+}
+
+.modal-footer .btn:hover {
+    transform: translateY(-2px);
+}
+
+.text-truncate-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.carousel-item img {
+    height: 400px; /* Adjust based on preference */
+    object-fit: contain;
+    background-color: #000;
+}
+
+.feature-list li {
+    margin-bottom: 0.5rem;
+}
+
+/*--------------------------------------------------------------
 # Resume Section
 --------------------------------------------------------------*/
 .resume .resume-side {
