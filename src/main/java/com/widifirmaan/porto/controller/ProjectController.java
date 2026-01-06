@@ -58,8 +58,8 @@ public class ProjectController {
             "https://github.com/widifirmaan/ExcelPintar-Media-Pembelajaran",
             List.of("assets/img/porto/excelpintar_1.png", "assets/img/porto/excelpintar_2.png", "assets/img/porto/excelpintar_3.png", "assets/img/porto/excelpintar_4.png"),
             List.of("Halaman Utama (Landing Page)", "Kompetensi Dasar (KD)", "Materi Pembelajaran", "Latihan Soal", "Quiz Interaktif", "Profil Pengembang", "Daftar Pustaka"),
-            List.of("PHP", "JavaScript", "HTML", "Smarty", "CSS"),
-            "Likely MySQL"
+            List.of("JavaScript", "HTML", "Smarty", "CSS"),
+            "None"
         ));
 
         // 5. Portograph
@@ -74,20 +74,8 @@ public class ProjectController {
             "None"
         ));
 
-        // 6. Angplov
+        // 6. Restaurant WP
         projects.add(new Project(6L,
-            "Angplov Undangan Digital (Wordpress)",
-            "Proyek ini adalah platform berbasis WordPress untuk membuat undangan pernikahan digital, yang telah dikemas menggunakan Docker untuk kemudahan deployment dan pengembangan.",
-            "https://undangan.widifirmaan.web.id",
-            "https://github.com/widifirmaan/Angplov-Undangan-Digital",
-            List.of("assets/img/porto/angplov_1.png", "assets/img/porto/angplov_2.png", "assets/img/porto/angplov_3.png"),
-            List.of("Lingkungan Docker (terisolasi dan konsisten)", "Ringan (konfigurasi dioptimalkan)", "Auto-Config (Database otomatis)"),
-            List.of("WordPress", "Docker", "MariaDB 10", "Apache", "PHP 8.x", "JavaScript"),
-            "MySQL"
-        ));
-
-        // 7. Restaurant WP
-        projects.add(new Project(7L,
             "GKSteak Web (Wordpress)",
             "Project ini adalah arsip website lama GKSteak yang telah dihidupkan kembali (revived). Saya mencoba memulihkan website ini dari file backup lawas dan mengemasnya ke dalam environment Docker.",
             "https://restaurant.widifirmaan.web.id",
@@ -98,9 +86,21 @@ public class ProjectController {
             "MySQL"
         ));
 
+        // 7. Angplov
+        projects.add(new Project(7L,
+            "Angplov Undangan Digital (Wordpress)",
+            "Proyek ini adalah platform berbasis WordPress untuk membuat undangan pernikahan digital, yang telah dikemas menggunakan Docker untuk kemudahan deployment dan pengembangan.",
+            "https://undangan.widifirmaan.web.id",
+            "https://github.com/widifirmaan/Angplov-Undangan-Digital",
+            List.of("assets/img/porto/angplov_1.png", "assets/img/porto/angplov_2.png", "assets/img/porto/angplov_3.png"),
+            List.of("Lingkungan Docker (terisolasi dan konsisten)", "Ringan (konfigurasi dioptimalkan)", "Auto-Config (Database otomatis)"),
+            List.of("WordPress", "Docker", "MariaDB 10", "Apache", "PHP 8.x", "JavaScript"),
+            "MySQL"
+        ));
+
         // 8. Omah Sampah
         projects.add(new Project(8L,
-            "Omah Sampah (PHP)",
+            "Omah Sampah (PHP)(Dead)",
             "Dashboard Trash Management System, built with PHP. This project makes it easier to manage waste collection and maggot management online.",
             "#",
             "#", // Repo deleted
