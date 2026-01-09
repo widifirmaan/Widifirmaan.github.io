@@ -38,8 +38,20 @@ public class ProjectController {
             "MongoDB"
         ));
 
-        // 3. DUFL Tools
+        // 3. Siap Nyafe
         projects.add(new Project(3L,
+            "Siap Nyafe - Coffee Shop POS (Spring Boot + React)",
+            "A state-of-the-art, web-based Point of Sale (POS) and Management System designed specifically for modern coffee shops. It features a distinctive Neo-Brutalist design language, Kitchen Display System (KDS), and comprehensive management tools.",
+            "https://nyafe.widifirmaan.web.id/",
+            "https://github.com/widifirmaan/Springboot-React-CoffeeShopManagement",
+            List.of("assets/img/porto/coffee_2.png", "assets/img/porto/coffee_1.png", "assets/img/porto/coffee_3.png", "assets/img/porto/coffee_4.png"),
+            List.of("Visual Menu & Smart Cart", "Kitchen Display System (KDS)", "Real-time Workflow", "Inventory & Stock Management", "Finance & Reports", "Employee Management", "Neo-Brutalist Design"),
+            List.of("Java 21", "Spring Boot 3.2", "React.js 18", "MongoDB", "Vite", "CSS Modules"),
+            "MongoDB"
+        ));
+
+        // 4. DUFL Tools
+        projects.add(new Project(4L,
             "DUFL Tools - Lightweight AIO Tools (Bootstrap)",
             "A collection of free, lightweight online tools built with HTML, CSS, JavaScript, and PHP. This project is designed to be highly efficient, running primarily on client-side technology to minimize server load, wrapped in an optimized Docker container.",
             "https://tools.dufl.web.id",
@@ -50,8 +62,8 @@ public class ProjectController {
             "None"
         ));
 
-        // 4. ExcelPintar
-        projects.add(new Project(4L, 
+        // 5. ExcelPintar
+        projects.add(new Project(5L, 
             "ExcelPintar Media Pembelajaran (Bootstrap)", 
             "ExcelPintar adalah aplikasi media pembelajaran berbasis web yang dirancang untuk membantu siswa memahami dasar-dasar pengoperasian Microsoft Excel. Aplikasi ini menyajikan materi secara interaktif, lengkap dengan video, latihan soal, dan kuis evaluasi.",
             "https://widifirmaan.github.io/ExcelPintar-Media-Pembelajaran/",
@@ -62,8 +74,8 @@ public class ProjectController {
             "None"
         ));
 
-        // 5. Portograph
-        projects.add(new Project(5L,
+        // 6. Portograph
+        projects.add(new Project(6L,
             "Portograph Wedding Portfolio Template (HTML5)",
             "Portograph is a premium, lightweight, and high-performance website template designed specifically for wedding cinematic services, photographers, and videographers. It features a modern, clean aesthetics with fluid animations to showcase your portfolio in the best light.",
             "https://widifirmaan.github.io/Portograph-Template/",
@@ -74,8 +86,8 @@ public class ProjectController {
             "None"
         ));
 
-        // 6. Restaurant WP
-        projects.add(new Project(6L,
+        // 7. Restaurant WP
+        projects.add(new Project(7L,
             "GKSteak Web (Wordpress)",
             "Project ini adalah arsip website lama GKSteak yang telah dihidupkan kembali (revived). Saya mencoba memulihkan website ini dari file backup lawas dan mengemasnya ke dalam environment Docker.",
             "https://restaurant.widifirmaan.web.id",
@@ -86,8 +98,8 @@ public class ProjectController {
             "MySQL"
         ));
 
-        // 7. Angplov
-        projects.add(new Project(7L,
+        // 8. Angplov
+        projects.add(new Project(8L,
             "Angplov Undangan Digital (Wordpress)",
             "Proyek ini adalah platform berbasis WordPress untuk membuat undangan pernikahan digital, yang telah dikemas menggunakan Docker untuk kemudahan deployment dan pengembangan.",
             "https://undangan.widifirmaan.web.id",
@@ -98,8 +110,8 @@ public class ProjectController {
             "MySQL"
         ));
 
-        // 8. Omah Sampah
-        projects.add(new Project(8L,
+        // 9. Omah Sampah
+        projects.add(new Project(9L,
             "Omah Sampah (PHP)(Dead)",
             "Dashboard Trash Management System, built with PHP. This project makes it easier to manage waste collection and maggot management online.",
             "#",
