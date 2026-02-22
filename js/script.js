@@ -84,7 +84,13 @@ async function initPortfolio() {
                 fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/README.md`)
                     .then(response => {
                         if (!response.ok) {
-                            return fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/Readme.md`);
+                            return fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/Readme.md`)
+                                .then(res => {
+                                    if (!res.ok) {
+                                        return fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/readme.md`);
+                                    }
+                                    return res;
+                                });
                         }
                         return response;
                     })
@@ -169,7 +175,13 @@ async function initPortfolio() {
                     fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/README.md`)
                         .then(response => {
                             if (!response.ok) {
-                                return fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/Readme.md`);
+                                return fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/Readme.md`)
+                                    .then(res => {
+                                        if (!res.ok) {
+                                            return fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/readme.md`);
+                                        }
+                                        return res;
+                                    });
                             }
                             return response;
                         })
