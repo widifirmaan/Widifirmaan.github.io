@@ -24,6 +24,7 @@ async function initPortfolio() {
                         tech: techList,
                         color: color,
                         repo: repo.full_name,
+                        branch: repo.default_branch || 'main',
                         images: [`https://opengraph.githubassets.com/1/${repo.full_name}`],
                         description: repo.description || 'No description available for this repository.',
                         link: repo.homepage && repo.homepage !== "" ? repo.homepage : repo.html_url
@@ -80,10 +81,10 @@ async function initPortfolio() {
         // Fetch READMEs for thumbnails asynchronously
         data.projects.list.forEach((p, idx) => {
             if (p.repo) {
-                fetch(`https://raw.githubusercontent.com/${p.repo}/main/README.md`)
+                fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/README.md`)
                     .then(response => {
                         if (!response.ok) {
-                            return fetch(`https://raw.githubusercontent.com/${p.repo}/master/README.md`);
+                            return fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/Readme.md`);
                         }
                         return response;
                     })
@@ -99,7 +100,7 @@ async function initPortfolio() {
                             let url = match[1] || match[2];
                             if (url && !url.includes('shields.io') && !url.includes('badge')) {
                                 if (!url.startsWith('http')) {
-                                    url = `https://raw.githubusercontent.com/${p.repo}/main/${url}`;
+                                    url = `https://raw.githubusercontent.com/${p.repo}/${p.branch}/${url.replace(/^\.\//, '')}`;
                                 }
                                 images.push(url);
                             }
@@ -165,10 +166,10 @@ async function initPortfolio() {
                     const descContainer = modalBody.querySelector('#modal-desc-container');
                     descContainer.innerHTML = '<p>Loading README...</p>';
 
-                    fetch(`https://raw.githubusercontent.com/${p.repo}/main/README.md`)
+                    fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/README.md`)
                         .then(response => {
                             if (!response.ok) {
-                                return fetch(`https://raw.githubusercontent.com/${p.repo}/master/README.md`);
+                                return fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/Readme.md`);
                             }
                             return response;
                         })
@@ -179,7 +180,7 @@ async function initPortfolio() {
                         .then(text => {
                             // Convert image relative paths to absolute raw URLs
                             let processedText = text.replace(/!\[([^\]]*)\]\((?!http|https)((?:[^)(]+|\([^)(]*\))+)\)/g,
-                                `![$1](https://raw.githubusercontent.com/${p.repo}/main/$2)`);
+                                `![$1](https://raw.githubusercontent.com/${p.repo}/${p.branch}/$2)`);
 
                             // Use marked to parse
                             if (typeof marked !== 'undefined') {
