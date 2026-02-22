@@ -1,7 +1,39 @@
 // Populate Data from Variable
-function initPortfolio() {
+async function initPortfolio() {
     try {
         const data = PORTFOLIO_DATA;
+
+        // Fetch GitHub Projects dynamically
+        try {
+            const githubRes = await fetch('https://api.github.com/users/widifirmaan/repos?sort=updated&type=owner&per_page=100');
+            if (githubRes.ok) {
+                const repos = await githubRes.json();
+                const colors = ['#00E5FF', '#FF5E5B', '#FFFF00', '#FFC0CB', '#00FF00', '#FFFFFF'];
+                const excludeRepos = ['widifirmaan.github.io', 'nextjs-telefish'];
+
+                // Exclude specific unwanted repos and forks
+                data.projects.list = repos.filter(repo => !repo.fork && !excludeRepos.includes(repo.name.toLowerCase())).map((repo, idx) => {
+                    const color = colors[idx % colors.length];
+                    let techList = repo.language || 'Multiple Technologies';
+                    if (repo.topics && repo.topics.length > 0) {
+                        techList = repo.topics.join(', ');
+                    }
+
+                    return {
+                        title: repo.name.replace(/[-_]/g, ' '),
+                        tech: techList,
+                        color: color,
+                        repo: repo.full_name,
+                        images: [`https://opengraph.githubassets.com/1/${repo.full_name}`],
+                        description: repo.description || 'No description available for this repository.',
+                        link: repo.homepage && repo.homepage !== "" ? repo.homepage : repo.html_url
+                    };
+                });
+            }
+        } catch (e) {
+            console.error('Error fetching GitHub repos:', e);
+            // Will fallback to data.js projects if fetch fails
+        }
 
         // Populate Hero
         const heroContainer = document.getElementById('hero-content');
@@ -34,16 +66,71 @@ function initPortfolio() {
             const projectEl = document.createElement('div');
             projectEl.className = 'project-card reveal';
             projectEl.innerHTML = `
-                <div class="project-image" style="background-color: ${project.color};">
+                <div class="project-image" id="project-image-${index}" style="background-color: ${project.color};">
                     ${project.images && project.images.length > 0 ? `<img src="${project.images[0]}" alt="${project.title}" style="width:100%; height:100%; object-fit:cover;">` : ''}
                 </div>
                 <div class="project-info">
-                    <h3>${project.title}</h3>
-                    <p>${project.tech}</p>
+                    <h3>${project.title.toUpperCase()}</h3>
                     <button class="btn btn-primary project-btn" data-index="${index}">VIEW DETAILS →</button>
                 </div>
             `;
             projectGrid.appendChild(projectEl);
+        });
+
+        // Fetch READMEs for thumbnails asynchronously
+        data.projects.list.forEach((p, idx) => {
+            if (p.repo) {
+                fetch(`https://raw.githubusercontent.com/${p.repo}/main/README.md`)
+                    .then(response => {
+                        if (!response.ok) {
+                            return fetch(`https://raw.githubusercontent.com/${p.repo}/master/README.md`);
+                        }
+                        return response;
+                    })
+                    .then(response => {
+                        if (!response.ok) throw new Error('README not found');
+                        return response.text();
+                    })
+                    .then(text => {
+                        const imgRegex = /!\[.*?\]\((.*?)\)|<img.*?src=["'](.*?)["']/g;
+                        let images = [];
+                        let match;
+                        while ((match = imgRegex.exec(text)) !== null) {
+                            let url = match[1] || match[2];
+                            if (url && !url.includes('shields.io') && !url.includes('badge')) {
+                                if (!url.startsWith('http')) {
+                                    url = `https://raw.githubusercontent.com/${p.repo}/main/${url}`;
+                                }
+                                images.push(url);
+                            }
+                        }
+
+                        // Remove duplicates
+                        images = [...new Set(images)];
+
+                        if (images.length > 0) {
+                            p.images = images; // Update data so modal gets these
+                            const imgContainer = document.getElementById(`project-image-${idx}`);
+                            if (imgContainer) {
+                                let gridClass = 'project-image-grid-1';
+                                if (images.length === 2) gridClass = 'project-image-grid-2';
+                                else if (images.length === 3) gridClass = 'project-image-grid-3';
+                                else if (images.length >= 4) gridClass = 'project-image-grid-4';
+
+                                imgContainer.className = `project-image project-image-grid ${gridClass}`;
+                                imgContainer.style.backgroundColor = 'var(--black)';
+
+                                const numImages = Math.min(images.length, 4);
+                                let html = '';
+                                for (let i = 0; i < numImages; i++) {
+                                    html += `<img src="${images[i]}" alt="${p.title}">`;
+                                }
+                                imgContainer.innerHTML = html;
+                            }
+                        }
+                    })
+                    .catch(err => { });
+            }
         });
 
         // Modal Logic
@@ -56,45 +143,57 @@ function initPortfolio() {
                 const idx = e.target.getAttribute('data-index');
                 const p = data.projects.list[idx];
 
-                modalBody.innerHTML = `
-                    <h2 class="section-title">${p.title}</h2>
-                    <div class="modal-tech-list">
-                        ${p.tech.split(',').map(t => `<span class="skill-tag" style="opacity:1; transform:none;">${t.trim()}</span>`).join('')}
-                    </div>
+                let modalContentHTML = `
+                    <h2 class="section-title">${p.title.toUpperCase()}</h2>
                     
-                    <div class="modal-gallery">
-                        <div class="gallery-main">
-                            <img src="${p.images[0]}" id="main-gallery-img">
-                        </div>
-                        <div class="thumbnail-grid">
-                            ${p.images.map((img, i) => `
-                                <div class="thumb-item ${i === 0 ? 'active' : ''}" data-src="${img}">
-                                    <img src="${img}">
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-
-                    <div class="modal-desc">
-                        <p>${p.description}</p>
-                    </div>
-                    <div class="modal-links">
+                    <div class="modal-links" style="margin-bottom: 20px;">
                         <a href="${p.link}" target="_blank" class="btn btn-primary">LIVE DEMO 🚀</a>
-                        <a href="#" class="btn btn-secondary">SOURCE CODE 🛠️</a>
+                        ${p.repo ? `<a href="https://github.com/${p.repo}" target="_blank" class="btn btn-secondary">SOURCE CODE 🛠️</a>` : '<a href="#" class="btn btn-secondary">SOURCE CODE 🛠️</a>'}
                     </div>
                 `;
 
-                // Thumbnail Click Logic
-                const thumbs = modalBody.querySelectorAll('.thumb-item');
-                const mainImg = modalBody.querySelector('#main-gallery-img');
+                modalContentHTML += `
+                    <div class="modal-desc" id="modal-desc-container">
+                        <p>${p.description}</p>
+                    </div>
+                `;
 
-                thumbs.forEach(thumb => {
-                    thumb.addEventListener('click', function () {
-                        mainImg.src = this.getAttribute('data-src');
-                        thumbs.forEach(t => t.classList.remove('active'));
-                        this.classList.add('active');
-                    });
-                });
+                modalBody.innerHTML = modalContentHTML;
+
+                // Fetch README if repo exists
+                if (p.repo) {
+                    const descContainer = modalBody.querySelector('#modal-desc-container');
+                    descContainer.innerHTML = '<p>Loading README...</p>';
+
+                    fetch(`https://raw.githubusercontent.com/${p.repo}/main/README.md`)
+                        .then(response => {
+                            if (!response.ok) {
+                                return fetch(`https://raw.githubusercontent.com/${p.repo}/master/README.md`);
+                            }
+                            return response;
+                        })
+                        .then(response => {
+                            if (!response.ok) throw new Error('README not found');
+                            return response.text();
+                        })
+                        .then(text => {
+                            // Convert image relative paths to absolute raw URLs
+                            let processedText = text.replace(/!\[([^\]]*)\]\((?!http|https)([^\)]+)\)/g,
+                                `![$1](https://raw.githubusercontent.com/${p.repo}/main/$2)`);
+
+                            // Use marked to parse
+                            if (typeof marked !== 'undefined') {
+                                descContainer.innerHTML = marked.parse(processedText);
+                                descContainer.classList.add('markdown-body');
+                            } else {
+                                descContainer.innerHTML = `<pre>${processedText}</pre>`;
+                            }
+                        })
+                        .catch(err => {
+                            console.error("Error loading README:", err);
+                            descContainer.innerHTML = `<p>${p.description}</p>`;
+                        });
+                }
 
                 modal.style.display = 'block';
                 document.body.style.overflow = 'hidden'; // Prevent scroll
