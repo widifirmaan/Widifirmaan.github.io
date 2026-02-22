@@ -428,10 +428,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (contactForm) {
         contactForm.addEventListener('submit', (e) => {
             e.preventDefault();
+
+            const name = document.getElementById('contact-name').value;
+            const email = document.getElementById('contact-email').value;
+            const message = document.getElementById('contact-message').value;
+
+            const subject = encodeURIComponent(`Portfolio Inquiry from ${name}`);
+            const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
+
+            // Open default mail client
+            window.location.href = `mailto:widifirmaan@outlook.com?subject=${subject}&body=${body}`;
+
             const btn = contactForm.querySelector('button');
             const originalText = btn.innerText;
 
-            btn.innerText = 'SENT! 🚀';
+            btn.innerText = 'OPENING MAIL CLIENT... 📩';
             btn.style.background = '#00E5FF';
 
             setTimeout(() => {
