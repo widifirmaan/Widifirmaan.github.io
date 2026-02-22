@@ -13,10 +13,6 @@ const PORTFOLIO_DATA = {
                 "content": "I transform complex problems into elegant, high-impact digital solutions. With a focus on performance and raw aesthetic, I push the boundaries of what's possible on the web."
             },
             {
-                "title": "THE APPROACH",
-                "content": "Neo-brutalism isn't just a style; it's a statement. I believe in transparency, bold choices, and technical excellence in every line of code."
-            },
-            {
                 "title": "PROFILE",
                 "content": "Based in D.I Yogyakarta, I bring a strong set of soft skills including Teamwork, Communication, Creativity, and Commitment. I am proficient in both Indonesia and English."
             }
