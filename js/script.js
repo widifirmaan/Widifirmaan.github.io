@@ -9,7 +9,7 @@ async function initPortfolio() {
             if (githubRes.ok) {
                 const repos = await githubRes.json();
                 const colors = ['#00E5FF', '#FF5E5B', '#FFFF00', '#FFC0CB', '#00FF00', '#FFFFFF'];
-                const excludeRepos = ['widifirmaan.github.io', 'nextjs-telefish'];
+                const excludeRepos = ['widifirmaan.github.io', 'nextjs-telefish', 'bash-android-aio-bypass-kit', 'clover-asus-vivobookflip-tp410ua'];
 
                 // Exclude specific unwanted repos and forks
                 data.projects.list = repos.filter(repo => !repo.fork && !excludeRepos.includes(repo.name.toLowerCase())).map((repo, idx) => {

@@ -1,7 +1,7 @@
 const PORTFOLIO_DATA = {
     "hero": {
-        "title": "WEB <br> <span class=\"highlight\">DEVELOPER</span>",
-        "description": "Building digital experiences that are bold, fast, and unforgettably brutalist.",
+        "title": "HI <span class=\"highlight\">I'M A WEB DEV</span>",
+        "description": "Crafting high-performance, scalable web solutions with modern technologies and a focus on technical excellence.",
         "primaryBtn": "VIEW WORK",
         "secondaryBtn": "SAY HELLO"
     },
@@ -26,6 +26,6 @@ const PORTFOLIO_DATA = {
     },
     "skills": {
         "title": "SKILLS",
-        "list": ["JavaScript", "React", "Next.js", "Node.js", "Tailwind", "Framer Motion", "PostgreSQL", "Three.js"]
+        "list": ["Springboot", "React", "Next.js", "Node.js", "Tailwind", "Laravel", "Codeigniter", "PostgreSQL", "Oracle", "mySQL", "MongoDB"]
     }
 };
