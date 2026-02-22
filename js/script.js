@@ -92,7 +92,7 @@ async function initPortfolio() {
                         return response.text();
                     })
                     .then(text => {
-                        const imgRegex = /!\[.*?\]\((.*?)\)|<img.*?src=["'](.*?)["']/g;
+                        const imgRegex = /!\[.*?\]\(((?:[^)(]+|\([^)(]*\))+)\)|<img.*?src=["'](.*?)["']/g;
                         let images = [];
                         let match;
                         while ((match = imgRegex.exec(text)) !== null) {
@@ -178,7 +178,7 @@ async function initPortfolio() {
                         })
                         .then(text => {
                             // Convert image relative paths to absolute raw URLs
-                            let processedText = text.replace(/!\[([^\]]*)\]\((?!http|https)([^\)]+)\)/g,
+                            let processedText = text.replace(/!\[([^\]]*)\]\((?!http|https)((?:[^)(]+|\([^)(]*\))+)\)/g,
                                 `![$1](https://raw.githubusercontent.com/${p.repo}/main/$2)`);
 
                             // Use marked to parse
