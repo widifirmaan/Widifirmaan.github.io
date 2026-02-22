@@ -508,6 +508,100 @@ body::before {
     color: var(--black);
 }
 
+/* Experience */
+.experience-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    position: relative;
+}
+
+.experience-timeline::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--black);
+    display: none;
+    /* Hide on larger screens if using cards, or keep for timeline */
+}
+
+.experience-item {
+    background: var(--white);
+    border: var(--border);
+    padding: 30px;
+    box-shadow: var(--shadow);
+    transition: 0.3s;
+    position: relative;
+}
+
+.experience-item:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 12px 12px 0px 0px var(--black);
+}
+
+.exp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid var(--black);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.exp-role-company h3 {
+    font-size: 1.8rem;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.exp-role-company h4 {
+    font-size: 1.2rem;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.exp-duration {
+    background: var(--black);
+    color: var(--white);
+    padding: 5px 15px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border: 2px solid var(--black);
+}
+
+.exp-body ul {
+    list-style: none;
+    margin-bottom: 20px;
+}
+
+.exp-body li {
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.exp-body li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+    font-weight: 900;
+}
+
+.exp-tech {
+    background: var(--accent);
+    padding: 10px 15px;
+    border: 2px solid var(--black);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
 /* Skills */
 .skills-container {
     display: flex;
@@ -608,6 +702,18 @@ body::before {
 .project-card.active {
     opacity: 1;
     transform: translateY(0) rotate(0);
+}
+
+/* Experience Section: Cascade Reveal */
+.experience-item {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.experience-item.active {
+    opacity: 1;
+    transform: translateX(0);
 }
 
 /* Skills Section: Scale Pop */

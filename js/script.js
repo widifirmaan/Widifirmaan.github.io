@@ -225,6 +225,34 @@ async function initPortfolio() {
             }
         };
 
+        // Populate Experience
+        if (data.experience) {
+            document.getElementById('experience-title').innerText = data.experience.title;
+            const experienceTimeline = document.getElementById('experience-timeline');
+            data.experience.items.forEach(exp => {
+                const expEl = document.createElement('div');
+                expEl.className = 'experience-item reveal';
+                expEl.innerHTML = `
+                    <div class="exp-header">
+                        <div class="exp-role-company">
+                            <h3>${exp.role}</h3>
+                            <h4>${exp.company}</h4>
+                        </div>
+                        <span class="exp-duration">${exp.duration}</span>
+                    </div>
+                    <div class="exp-body">
+                        <ul>
+                            ${exp.description.map(desc => `<li>${desc}</li>`).join('')}
+                        </ul>
+                        <div class="exp-tech">
+                            <strong>Tech:</strong> ${exp.tech_stack}
+                        </div>
+                    </div>
+                `;
+                experienceTimeline.appendChild(expEl);
+            });
+        }
+
         // Populate Skills
         document.getElementById('skills-title').innerText = data.skills.title;
         const skillsContainer = document.getElementById('skills-container');
@@ -245,7 +273,7 @@ async function initPortfolio() {
 
 function refreshDynamicEvents() {
     // Re-select all elements that might be dynamic
-    const revealItems = document.querySelectorAll('.reveal, .skills-container, .project-grid, .contact-box, .project-card');
+    const revealItems = document.querySelectorAll('.reveal, .skills-container, .project-grid, .experience-timeline, .contact-box, .project-card');
     revealItems.forEach(el => observer.observe(el));
 
     // Update interactables for cursor
@@ -303,6 +331,15 @@ const observer = new IntersectionObserver((entries) => {
                     }, i * 200);
                 });
             }
+
+            if (entry.target.classList.contains('experience-timeline')) {
+                const items = entry.target.querySelectorAll('.experience-item');
+                items.forEach((item, i) => {
+                    setTimeout(() => {
+                        item.classList.add('active');
+                    }, i * 200);
+                });
+            }
         } else {
             if (entry.target.classList.contains('skills-container')) {
                 const tags = entry.target.querySelectorAll('.skill-tag');
@@ -314,6 +351,10 @@ const observer = new IntersectionObserver((entries) => {
             if (entry.target.classList.contains('project-grid')) {
                 const cards = entry.target.querySelectorAll('.project-card');
                 cards.forEach(card => card.classList.remove('active'));
+            }
+            if (entry.target.classList.contains('experience-timeline')) {
+                const items = entry.target.querySelectorAll('.experience-item');
+                items.forEach(item => item.classList.remove('active'));
             }
             entry.target.classList.remove('active');
         }
