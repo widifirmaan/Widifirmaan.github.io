@@ -83,6 +83,23 @@ async function initPortfolio() {
                     if (repo.topics && repo.topics.length > 0) {
                         techList = repo.topics.join(', ');
                     }
+                    
+                    return {
+                        title: repo.name.replace(/[-_]/g, ' '),
+                        tech: techList,
+                        color: color,
+                        repo: repo.full_name,
+                        branch: repo.default_branch || 'main',
+                        images: [`https://opengraph.githubassets.com/1/${repo.full_name}`],
+                        description: repo.description || 'No description available for this repository.',
+                        link: repo.homepage && repo.homepage !== "" ? repo.homepage : repo.html_url
+                    };
+                });
+            }
+        } catch (e) {
+            console.error('Error fetching GitHub repos:', e);
+            // Will fallback to data.js projects if fetch fails
+        }
 
         // Populate Projects
         document.getElementById('projects-title').innerText = data.projects.title;
