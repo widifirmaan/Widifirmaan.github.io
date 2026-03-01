@@ -3,39 +3,6 @@ async function initPortfolio() {
     try {
         const data = PORTFOLIO_DATA;
 
-        // Fetch GitHub Projects dynamically
-        try {
-            const githubRes = await fetch('https://api.github.com/users/widifirmaan/repos?sort=updated&type=owner&per_page=100');
-            if (githubRes.ok) {
-                const repos = await githubRes.json();
-                const colors = ['#00E5FF', '#FF5E5B', '#FFFF00', '#FFC0CB', '#00FF00', '#FFFFFF'];
-                const excludeRepos = ['widifirmaan.github.io', 'nextjs-telefish', 'bash-android-aio-bypass-kit', 'clover-asus-vivobookflip-tp410ua'];
-
-                // Exclude specific unwanted repos and forks
-                data.projects.list = repos.filter(repo => !repo.fork && !excludeRepos.includes(repo.name.toLowerCase())).map((repo, idx) => {
-                    const color = colors[idx % colors.length];
-                    let techList = repo.language || 'Multiple Technologies';
-                    if (repo.topics && repo.topics.length > 0) {
-                        techList = repo.topics.join(', ');
-                    }
-
-                    return {
-                        title: repo.name.replace(/[-_]/g, ' '),
-                        tech: techList,
-                        color: color,
-                        repo: repo.full_name,
-                        branch: repo.default_branch || 'main',
-                        images: [`https://opengraph.githubassets.com/1/${repo.full_name}`],
-                        description: repo.description || 'No description available for this repository.',
-                        link: repo.homepage && repo.homepage !== "" ? repo.homepage : repo.html_url
-                    };
-                });
-            }
-        } catch (e) {
-            console.error('Error fetching GitHub repos:', e);
-            // Will fallback to data.js projects if fetch fails
-        }
-
         // Populate Hero
         const heroContainer = document.getElementById('hero-content');
         heroContainer.innerHTML = `
@@ -59,6 +26,63 @@ async function initPortfolio() {
             `;
             aboutGrid.appendChild(cardEl);
         });
+
+        // Populate Experience
+        if (data.experience) {
+            document.getElementById('experience-title').innerText = data.experience.title;
+            const experienceTimeline = document.getElementById('experience-timeline');
+            data.experience.items.forEach(exp => {
+                const expEl = document.createElement('div');
+                expEl.className = 'experience-item reveal';
+                expEl.innerHTML = `
+                    <div class="exp-header">
+                        <div class="exp-role-company">
+                            <h3>${exp.role}</h3>
+                            <h4>${exp.company}</h4>
+                        </div>
+                        <span class="exp-duration">${exp.duration}</span>
+                    </div>
+                    <div class="exp-body">
+                        <ul>
+                            ${exp.description.map(desc => `<li>${desc}</li>`).join('')}
+                        </ul>
+                        <div class="exp-tech">
+                            <strong>Tech:</strong> ${exp.tech_stack}
+                        </div>
+                    </div>
+                `;
+                experienceTimeline.appendChild(expEl);
+            });
+        }
+
+        // Populate Skills
+        document.getElementById('skills-title').innerText = data.skills.title;
+        const skillsContainer = document.getElementById('skills-container');
+        data.skills.list.forEach(skill => {
+            const skillEl = document.createElement('div');
+            skillEl.className = 'skill-tag';
+            skillEl.innerText = skill;
+            skillsContainer.appendChild(skillEl);
+        });
+
+        // Initial render for static sections
+        refreshDynamicEvents();
+
+        // Fetch GitHub Projects dynamically
+        try {
+            const githubRes = await fetch('https://api.github.com/users/widifirmaan/repos?sort=updated&type=owner&per_page=100');
+            if (githubRes.ok) {
+                const repos = await githubRes.json();
+                const colors = ['#00E5FF', '#FF5E5B', '#FFFF00', '#FFC0CB', '#00FF00', '#FFFFFF'];
+                const excludeRepos = ['widifirmaan.github.io', 'nextjs-telefish', 'bash-android-aio-bypass-kit', 'clover-asus-vivobookflip-tp410ua'];
+
+                // Exclude specific unwanted repos and forks
+                data.projects.list = repos.filter(repo => !repo.fork && !excludeRepos.includes(repo.name.toLowerCase())).map((repo, idx) => {
+                    const color = colors[idx % colors.length];
+                    let techList = repo.language || 'Multiple Technologies';
+                    if (repo.topics && repo.topics.length > 0) {
+                        techList = repo.topics.join(', ');
+                    }
 
         // Populate Projects
         document.getElementById('projects-title').innerText = data.projects.title;
@@ -225,44 +249,6 @@ async function initPortfolio() {
             }
         };
 
-        // Populate Experience
-        if (data.experience) {
-            document.getElementById('experience-title').innerText = data.experience.title;
-            const experienceTimeline = document.getElementById('experience-timeline');
-            data.experience.items.forEach(exp => {
-                const expEl = document.createElement('div');
-                expEl.className = 'experience-item reveal';
-                expEl.innerHTML = `
-                    <div class="exp-header">
-                        <div class="exp-role-company">
-                            <h3>${exp.role}</h3>
-                            <h4>${exp.company}</h4>
-                        </div>
-                        <span class="exp-duration">${exp.duration}</span>
-                    </div>
-                    <div class="exp-body">
-                        <ul>
-                            ${exp.description.map(desc => `<li>${desc}</li>`).join('')}
-                        </ul>
-                        <div class="exp-tech">
-                            <strong>Tech:</strong> ${exp.tech_stack}
-                        </div>
-                    </div>
-                `;
-                experienceTimeline.appendChild(expEl);
-            });
-        }
-
-        // Populate Skills
-        document.getElementById('skills-title').innerText = data.skills.title;
-        const skillsContainer = document.getElementById('skills-container');
-        data.skills.list.forEach(skill => {
-            const skillEl = document.createElement('div');
-            skillEl.className = 'skill-tag';
-            skillEl.innerText = skill;
-            skillsContainer.appendChild(skillEl);
-        });
-
         // Re-initialize observers and events after dynamic content is added
         refreshDynamicEvents();
 
@@ -279,14 +265,17 @@ function refreshDynamicEvents() {
     // Update interactables for cursor
     const interactables = document.querySelectorAll('a, button, .project-card, .skill-tag, .curtain-panel');
     interactables.forEach(item => {
-        item.addEventListener('mouseenter', () => {
-            cursor.style.transform = 'scale(3)';
-            cursor.style.backgroundColor = 'var(--secondary)';
-        });
-        item.addEventListener('mouseleave', () => {
-            cursor.style.transform = 'scale(1)';
-            cursor.style.backgroundColor = 'var(--primary)';
-        });
+        if (!item.dataset.cursorBound) {
+            item.dataset.cursorBound = 'true';
+            item.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'scale(3)';
+                cursor.style.backgroundColor = 'var(--secondary)';
+            });
+            item.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'scale(1)';
+                cursor.style.backgroundColor = 'var(--primary)';
+            });
+        }
     });
 
     // Animate hero reveals immediately
