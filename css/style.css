@@ -118,6 +118,94 @@ body::before {
     box-shadow: 2px 2px 0px 0px var(--black);
 }
 
+/* Nav Actions Container */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Language Switcher */
+.lang-switcher {
+    position: relative;
+}
+
+.lang-btn {
+    background: var(--white);
+    border: var(--border);
+    padding: 8px 16px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    box-shadow: 4px 4px 0px 0px var(--black);
+    transition: 0.2s;
+    cursor: none;
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: 0.5px;
+}
+
+.lang-btn:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px 0px var(--black);
+    background: var(--accent);
+}
+
+.lang-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: var(--white);
+    border: var(--border);
+    box-shadow: 6px 6px 0px 0px var(--black);
+    z-index: 1001;
+    display: none;
+    flex-direction: column;
+    min-width: 160px;
+    overflow: hidden;
+}
+
+.lang-dropdown.active {
+    display: flex;
+    animation: dropdownSlide 0.2s ease-out;
+}
+
+@keyframes dropdownSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.lang-dropdown button {
+    background: var(--white);
+    border: none;
+    border-bottom: 2px solid var(--black);
+    padding: 12px 18px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-align: left;
+    cursor: none;
+    transition: 0.15s;
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+.lang-dropdown button:last-child {
+    border-bottom: none;
+}
+
+.lang-dropdown button:hover {
+    background: var(--accent);
+}
+
+.lang-dropdown button.lang-active {
+    background: var(--secondary);
+    font-weight: 900;
+}
+
 /* Hero Section */
 /* Hero & Curtain Effect */
 .hero {
@@ -1199,6 +1287,21 @@ body::before {
 
     .nav-links {
         display: none;
+    }
+
+    .nav-actions {
+        gap: 8px;
+    }
+
+    .lang-btn {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+        box-shadow: 3px 3px 0px 0px var(--black);
+    }
+
+    .nav-cta {
+        padding: 6px 12px;
+        font-size: 0.8rem;
     }
 
     .marquee {

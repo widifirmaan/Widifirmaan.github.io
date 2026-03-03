@@ -22,17 +22,27 @@
     <nav class="navbar">
         <div class="nav-logo">\/\/ PORTFOLIO</div>
         <ul class="nav-links">
-            <li><a href="#about">About</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#experience">Experience</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="#about" data-i18n="navAbout">About</a></li>
+            <li><a href="#projects" data-i18n="navProjects">Projects</a></li>
+            <li><a href="#experience" data-i18n="navExperience">Experience</a></li>
+            <li><a href="#skills" data-i18n="navSkills">Skills</a></li>
+            <li><a href="#contact" data-i18n="navContact">Contact</a></li>
         </ul>
-        <button class="nav-cta">HIRE ME</button>
+        <div class="nav-actions">
+            <div class="lang-switcher">
+                <button class="lang-btn" id="lang-toggle">🌐 EN</button>
+                <div class="lang-dropdown" id="lang-dropdown">
+                    <button data-lang="en">🇺🇸 English</button>
+                    <button data-lang="id">🇮🇩 Indonesia</button>
+                    <button data-lang="zh">🇨🇳 中文</button>
+                </div>
+            </div>
+            <button class="nav-cta" data-i18n="navHireMe">HIRE ME</button>
+        </div>
     </nav>
 
     <div class="marquee">
-        <div class="marquee-content">
+        <div class="marquee-content" data-i18n="marquee">
             ✦ FULL STACK DEVELOPER ✦ UI/UX DESIGNER ✦ INNOVATOR ✦ OPEN FOR COLLABORATION ✦ FULL STACK DEVELOPER ✦ UI/UX
             DESIGNER ✦ INNOVATOR ✦ OPEN FOR COLLABORATION ✦ FULL STACK DEVELOPER ✦ UI/UX DESIGNER ✦ INNOVATOR ✦ OPEN FOR
             COLLABORATION ✦
@@ -58,7 +68,7 @@
                 <div class="shape shape-3">
                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React">
                 </div>
-                <div class="curtain-info">SCROLL TO REVEAL ↓</div>
+                <div class="curtain-info" data-i18n="scrollToReveal">SCROLL TO REVEAL ↓</div>
             </div>
         </div>
     </header>
@@ -95,27 +105,30 @@
 
     <section id="contact" class="section contact">
         <div class="contact-box reveal">
-            <h2 class="section-title" id="contact-title">LET'S CONNECT</h2>
+            <h2 class="section-title" id="contact-title" data-i18n="contactTitle">LET'S CONNECT</h2>
             <form id="contact-form">
                 <div class="form-group">
-                    <label for="contact-name">NAME</label>
-                    <input type="text" id="contact-name" placeholder="John Doe" required>
+                    <label for="contact-name" data-i18n="contactName">NAME</label>
+                    <input type="text" id="contact-name" data-i18n-placeholder="contactNamePlaceholder"
+                        placeholder="John Doe" required>
                 </div>
                 <div class="form-group">
-                    <label for="contact-email">EMAIL</label>
-                    <input type="email" id="contact-email" placeholder="john@example.com" required>
+                    <label for="contact-email" data-i18n="contactEmail">EMAIL</label>
+                    <input type="email" id="contact-email" data-i18n-placeholder="contactEmailPlaceholder"
+                        placeholder="john@example.com" required>
                 </div>
                 <div class="form-group">
-                    <label for="contact-message">MESSAGE</label>
-                    <textarea id="contact-message" placeholder="Tell me about your project..." required></textarea>
+                    <label for="contact-message" data-i18n="contactMessage">MESSAGE</label>
+                    <textarea id="contact-message" data-i18n-placeholder="contactMessagePlaceholder"
+                        placeholder="Tell me about your project..." required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">SEND MESSAGE</button>
+                <button type="submit" class="btn btn-primary" data-i18n="contactSend">SEND MESSAGE</button>
             </form>
         </div>
     </section>
 
     <footer class="footer">
-        <p>© 2026 DEV.PORTFOLIO - MADE WITH CHAOS & CODE</p>
+        <p data-i18n="footer">© 2026 DEV.PORTFOLIO - MADE WITH CHAOS & CODE</p>
     </footer>
 
     <!-- Project Modal -->

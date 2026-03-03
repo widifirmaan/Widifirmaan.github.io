@@ -1,3 +1,106 @@
+// Language Management
+let currentLang = localStorage.getItem('portfolioLang') || 'en';
+
+function t(key) {
+    const translations = PORTFOLIO_DATA.translations;
+    return translations[currentLang]?.[key] || translations['en']?.[key] || key;
+}
+
+function setLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('portfolioLang', lang);
+
+    // Update all static [data-i18n] elements
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const translation = t(key);
+        if (translation) {
+            if (key === 'marquee' || key === 'heroTitle') {
+                el.innerHTML = translation;
+            } else {
+                el.textContent = translation;
+            }
+        }
+    });
+
+    // Update all [data-i18n-placeholder] elements
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        const translation = t(key);
+        if (translation) {
+            el.placeholder = translation;
+        }
+    });
+
+    // Update toggle button label
+    const langLabels = { en: '🌐 EN', id: '🌐 ID', zh: '🌐 ZH' };
+    const toggleBtn = document.getElementById('lang-toggle');
+    if (toggleBtn) toggleBtn.textContent = langLabels[lang] || '🌐 EN';
+
+    // Update active state in dropdown
+    document.querySelectorAll('#lang-dropdown button').forEach(btn => {
+        btn.classList.toggle('lang-active', btn.getAttribute('data-lang') === lang);
+    });
+
+    // Re-render dynamic content
+    renderDynamicContent();
+}
+
+function renderDynamicContent() {
+    const data = PORTFOLIO_DATA;
+
+    // Re-render Hero
+    const heroContainer = document.getElementById('hero-content');
+    if (heroContainer) {
+        heroContainer.innerHTML = `
+            <h1 class="reveal active">${t('heroTitle')}</h1>
+            <p class="reveal active">${t('heroDesc')}</p>
+            <div class="hero-btns">
+                <a href="#projects" class="btn btn-primary">${t('heroPrimaryBtn')}</a>
+                <a href="#contact" class="btn btn-secondary">${t('heroSecondaryBtn')}</a>
+            </div>
+        `;
+    }
+
+    // Re-render About
+    document.getElementById('about-title').innerText = t('aboutTitle');
+    const aboutGrid = document.getElementById('about-grid');
+    if (aboutGrid) {
+        aboutGrid.innerHTML = '';
+        const aboutCards = [
+            { titleKey: 'aboutStoryTitle', contentKey: 'aboutStoryContent' },
+            { titleKey: 'aboutProfileTitle', contentKey: 'aboutProfileContent' }
+        ];
+        aboutCards.forEach(card => {
+            const cardEl = document.createElement('div');
+            cardEl.className = 'about-card reveal active';
+            cardEl.innerHTML = `
+                <h3>${t(card.titleKey)}</h3>
+                <p>${t(card.contentKey)}</p>
+            `;
+            aboutGrid.appendChild(cardEl);
+        });
+    }
+
+    // Re-render Experience title
+    if (data.experience) {
+        document.getElementById('experience-title').innerText = t('experienceTitle');
+    }
+
+    // Re-render Skills title
+    document.getElementById('skills-title').innerText = t('skillsTitle');
+
+    // Re-render Projects title
+    document.getElementById('projects-title').innerText = t('projectsTitle');
+
+    // Update view details buttons
+    document.querySelectorAll('.project-btn').forEach(btn => {
+        btn.textContent = t('viewDetails');
+    });
+
+    refreshDynamicEvents();
+}
+
 // Populate Data from Variable
 async function initPortfolio() {
     try {
@@ -6,30 +109,34 @@ async function initPortfolio() {
         // Populate Hero
         const heroContainer = document.getElementById('hero-content');
         heroContainer.innerHTML = `
-            <h1 class="reveal">${data.hero.title}</h1>
-            <p class="reveal">${data.hero.description}</p>
+            <h1 class="reveal">${t('heroTitle')}</h1>
+            <p class="reveal">${t('heroDesc')}</p>
             <div class="hero-btns">
-                <a href="#projects" class="btn btn-primary">${data.hero.primaryBtn}</a>
-                <a href="#contact" class="btn btn-secondary">${data.hero.secondaryBtn}</a>
+                <a href="#projects" class="btn btn-primary">${t('heroPrimaryBtn')}</a>
+                <a href="#contact" class="btn btn-secondary">${t('heroSecondaryBtn')}</a>
             </div>
         `;
 
         // Populate About
-        document.getElementById('about-title').innerText = data.about.title;
+        document.getElementById('about-title').innerText = t('aboutTitle');
         const aboutGrid = document.getElementById('about-grid');
-        data.about.cards.forEach(card => {
+        const aboutCards = [
+            { titleKey: 'aboutStoryTitle', contentKey: 'aboutStoryContent' },
+            { titleKey: 'aboutProfileTitle', contentKey: 'aboutProfileContent' }
+        ];
+        aboutCards.forEach(card => {
             const cardEl = document.createElement('div');
             cardEl.className = 'about-card reveal';
             cardEl.innerHTML = `
-                <h3>${card.title}</h3>
-                <p>${card.content}</p>
+                <h3>${t(card.titleKey)}</h3>
+                <p>${t(card.contentKey)}</p>
             `;
             aboutGrid.appendChild(cardEl);
         });
 
         // Populate Experience
         if (data.experience) {
-            document.getElementById('experience-title').innerText = data.experience.title;
+            document.getElementById('experience-title').innerText = t('experienceTitle');
             const experienceTimeline = document.getElementById('experience-timeline');
             data.experience.items.forEach(exp => {
                 const expEl = document.createElement('div');
@@ -56,7 +163,7 @@ async function initPortfolio() {
         }
 
         // Populate Skills
-        document.getElementById('skills-title').innerText = data.skills.title;
+        document.getElementById('skills-title').innerText = t('skillsTitle');
         const skillsContainer = document.getElementById('skills-container');
         data.skills.list.forEach(skill => {
             const skillEl = document.createElement('div');
@@ -83,7 +190,7 @@ async function initPortfolio() {
                     if (repo.topics && repo.topics.length > 0) {
                         techList = repo.topics.join(', ');
                     }
-                    
+
                     return {
                         title: repo.name.replace(/[-_]/g, ' '),
                         tech: techList,
@@ -102,7 +209,7 @@ async function initPortfolio() {
         }
 
         // Populate Projects
-        document.getElementById('projects-title').innerText = data.projects.title;
+        document.getElementById('projects-title').innerText = t('projectsTitle');
         const projectGrid = document.getElementById('project-grid');
         data.projects.list.forEach((project, index) => {
             const projectEl = document.createElement('div');
@@ -113,7 +220,7 @@ async function initPortfolio() {
                 </div>
                 <div class="project-info">
                     <h3>${project.title.toUpperCase()}</h3>
-                    <button class="btn btn-primary project-btn" data-index="${index}">VIEW DETAILS →</button>
+                    <button class="btn btn-primary project-btn" data-index="${index}">${t('viewDetails')}</button>
                 </div>
             `;
             projectGrid.appendChild(projectEl);
@@ -195,8 +302,8 @@ async function initPortfolio() {
                     <h2 class="section-title">${p.title.toUpperCase()}</h2>
                     
                     <div class="modal-links" style="margin-bottom: 20px;">
-                        <a href="${p.link}" target="_blank" class="btn btn-primary">LIVE DEMO 🚀</a>
-                        ${p.repo ? `<a href="https://github.com/${p.repo}" target="_blank" class="btn btn-secondary">SOURCE CODE 🛠️</a>` : '<a href="#" class="btn btn-secondary">SOURCE CODE 🛠️</a>'}
+                        <a href="${p.link}" target="_blank" class="btn btn-primary">${t('liveDemo')}</a>
+                        ${p.repo ? `<a href="https://github.com/${p.repo}" target="_blank" class="btn btn-secondary">${t('sourceCode')}</a>` : `<a href="#" class="btn btn-secondary">${t('sourceCode')}</a>`}
                     </div>
                 `;
 
@@ -211,7 +318,7 @@ async function initPortfolio() {
                 // Fetch README if repo exists
                 if (p.repo) {
                     const descContainer = modalBody.querySelector('#modal-desc-container');
-                    descContainer.innerHTML = '<p>Loading README...</p>';
+                    descContainer.innerHTML = `<p>${t('loadingReadme')}</p>`;
 
                     fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/README.md`)
                         .then(response => {
@@ -268,6 +375,9 @@ async function initPortfolio() {
 
         // Re-initialize observers and events after dynamic content is added
         refreshDynamicEvents();
+
+        // Apply saved language to static elements
+        setLanguage(currentLang);
 
     } catch (error) {
         console.error('Error loading portfolio data:', error);
@@ -429,6 +539,33 @@ window.addEventListener('scroll', () => {
 document.addEventListener('DOMContentLoaded', () => {
     initPortfolio();
 
+    // Language Switcher Logic
+    const langToggle = document.getElementById('lang-toggle');
+    const langDropdown = document.getElementById('lang-dropdown');
+
+    if (langToggle && langDropdown) {
+        langToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            langDropdown.classList.toggle('active');
+        });
+
+        langDropdown.querySelectorAll('button[data-lang]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const lang = btn.getAttribute('data-lang');
+                setLanguage(lang);
+                langDropdown.classList.remove('active');
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.lang-switcher')) {
+                langDropdown.classList.remove('active');
+            }
+        });
+    }
+
     // Form Submission (Simulated)
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
@@ -448,11 +585,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const btn = contactForm.querySelector('button');
             const originalText = btn.innerText;
 
-            btn.innerText = 'OPENING MAIL CLIENT... 📩';
+            btn.innerText = t('contactSending');
             btn.style.background = '#00E5FF';
 
             setTimeout(() => {
-                btn.innerText = originalText;
+                btn.innerText = t('contactSend');
                 btn.style.background = '';
                 contactForm.reset();
             }, 3000);
