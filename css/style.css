@@ -238,6 +238,7 @@ body::before {
     padding-top: 120px;
     /* Extra padding to avoid overlap with fixed nav/marquee */
     border-right: 2px solid var(--black);
+    z-index: 2;
 }
 
 .curtain-panel.right {
@@ -246,6 +247,7 @@ body::before {
     padding-top: 120px;
     /* Extra padding to avoid overlap */
     border-left: 2px solid var(--black);
+    z-index: 1;
 }
 
 
