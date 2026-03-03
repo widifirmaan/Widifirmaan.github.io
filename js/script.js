@@ -456,23 +456,9 @@ const observer = new IntersectionObserver((entries) => {
                     }, i * 200);
                 });
             }
-        } else {
-            if (entry.target.classList.contains('skills-container')) {
-                const tags = entry.target.querySelectorAll('.skill-tag');
-                tags.forEach(tag => {
-                    tag.style.opacity = '0';
-                    tag.style.transform = 'translateY(20px) scale(0.8)';
-                });
-            }
-            if (entry.target.classList.contains('project-grid')) {
-                const cards = entry.target.querySelectorAll('.project-card');
-                cards.forEach(card => card.classList.remove('active'));
-            }
-            if (entry.target.classList.contains('experience-timeline')) {
-                const items = entry.target.querySelectorAll('.experience-item');
-                items.forEach(item => item.classList.remove('active'));
-            }
-            entry.target.classList.remove('active');
+
+            // Stop observing — animate only once
+            observer.unobserve(entry.target);
         }
     });
 }, observerOptions);
@@ -562,6 +548,34 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.lang-switcher')) {
                 langDropdown.classList.remove('active');
+            }
+        });
+    }
+
+    // Hamburger Menu Logic
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
+
+    if (hamburger && navLinks) {
+        hamburger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when clicking a nav link
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.navbar')) {
+                hamburger.classList.remove('active');
+                navLinks.classList.remove('active');
             }
         });
     }

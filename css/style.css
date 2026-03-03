@@ -1188,6 +1188,48 @@ body::before {
 }
 
 
+/* Hamburger Button - Hidden on desktop */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    background: var(--white);
+    border: var(--border);
+    padding: 10px 10px;
+    cursor: none;
+    box-shadow: 4px 4px 0px 0px var(--black);
+    transition: 0.2s;
+}
+
+.hamburger:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px 0px var(--black);
+    background: var(--accent);
+}
+
+.hamburger span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: var(--black);
+    transition: 0.3s;
+    transform-origin: center;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 6px);
+}
+
+.hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -6px);
+}
+
+
 @media (max-width: 1024px) {
     .section {
         padding: 80px 10%;
@@ -1207,6 +1249,63 @@ body::before {
 
     .curtain-panel.left {
         padding-left: 5%;
+    }
+
+    /* Show hamburger on tablet */
+    .hamburger {
+        display: flex;
+    }
+
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--white);
+        border-bottom: var(--border);
+        box-shadow: 0 8px 0px 0px var(--black);
+        flex-direction: column;
+        gap: 0;
+        padding: 0;
+        z-index: 999;
+    }
+
+    .nav-links.active {
+        display: flex;
+        animation: menuSlideDown 0.3s ease-out;
+    }
+
+    @keyframes menuSlideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .nav-links li {
+        border-bottom: 2px solid var(--black);
+    }
+
+    .nav-links li:last-child {
+        border-bottom: none;
+    }
+
+    .nav-links a {
+        display: block;
+        padding: 18px 30px;
+        font-size: 1.1rem;
+        transition: 0.15s;
+    }
+
+    .nav-links a:hover {
+        background: var(--accent);
+        text-decoration: none;
     }
 }
 
@@ -1287,10 +1386,6 @@ body::before {
         font-size: 2rem;
     }
 
-    .nav-links {
-        display: none;
-    }
-
     .nav-actions {
         gap: 8px;
     }
@@ -1304,6 +1399,20 @@ body::before {
     .nav-cta {
         padding: 6px 12px;
         font-size: 0.8rem;
+    }
+
+    .hamburger {
+        padding: 6px 6px;
+        box-shadow: 3px 3px 0px 0px var(--black);
+    }
+
+    .hamburger span {
+        height: 2px;
+    }
+
+    .nav-links a {
+        padding: 15px 20px;
+        font-size: 1rem;
     }
 
     .marquee {
