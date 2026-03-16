@@ -1196,7 +1196,7 @@ body::before {
     display: none;
     flex-direction: column;
     justify-content: center;
-    gap: 4px;
+    /* gap: 4px; */
     background: var(--white);
     border: var(--border);
     padding: 10px 10px;
@@ -1405,7 +1405,7 @@ body::before {
     }
 
     .hamburger {
-        padding: 6px 6px;
+        /* padding: 6px 6px; */
         box-shadow: 3px 3px 0px 0px var(--black);
     }
 
