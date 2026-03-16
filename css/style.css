@@ -410,7 +410,6 @@ body::before {
     transform: rotate(15deg);
     --rot: 15deg;
     object-fit: cover;
-    transform: rotate(-15deg);
 }
 
 .shape-2 img {
