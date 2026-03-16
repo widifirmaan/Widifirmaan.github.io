@@ -407,6 +407,8 @@ body::before {
 .shape-1 img {
     width: 100%;
     height: 100%;
+    transform: rotate(15deg);
+    --rot: 15deg;
     object-fit: cover;
     transform: rotate(-15deg);
 }
