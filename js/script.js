@@ -101,6 +101,16 @@ function renderDynamicContent() {
     refreshDynamicEvents();
 }
 
+// ─── Utility: Image Optimization ───────────────────────────────────────────
+function optimizeImageUrl(url, width = 600) {
+    if (!url) return '';
+    if (url.includes('github') || url.includes('githubassets.com')) {
+        const encodedUrl = encodeURIComponent(url);
+        return `https://images.weserv.nl/?url=${encodedUrl}&w=${width}&output=webp&q=80`;
+    }
+    return url;
+}
+
 // Populate Data from Variable
 async function initPortfolio() {
     try {
@@ -108,69 +118,88 @@ async function initPortfolio() {
 
         // Populate Hero
         const heroContainer = document.getElementById('hero-content');
-        heroContainer.innerHTML = `
-            <h1 class="reveal">${t('heroTitle')}</h1>
-            <p class="reveal">${t('heroDesc')}</p>
-            <div class="hero-btns">
-                <a href="#projects" class="btn btn-primary">${t('heroPrimaryBtn')}</a>
-                <a href="#contact" class="btn btn-secondary">${t('heroSecondaryBtn')}</a>
-            </div>
-        `;
+        if (heroContainer) {
+            heroContainer.innerHTML = `
+                <h1 class="reveal">${t('heroTitle')}</h1>
+                <p class="reveal">${t('heroDesc')}</p>
+                <div class="hero-btns">
+                    <a href="#projects" class="btn btn-primary">${t('heroPrimaryBtn')}</a>
+                    <a href="#contact" class="btn btn-secondary">${t('heroSecondaryBtn')}</a>
+                </div>
+            `;
+        }
 
         // Populate About
-        document.getElementById('about-title').innerText = t('aboutTitle');
+        const aboutTitle = document.getElementById('about-title');
+        if (aboutTitle) aboutTitle.innerText = t('aboutTitle');
+        
         const aboutGrid = document.getElementById('about-grid');
-        const aboutCards = [
-            { titleKey: 'aboutStoryTitle', contentKey: 'aboutStoryContent' },
-            { titleKey: 'aboutProfileTitle', contentKey: 'aboutProfileContent' }
-        ];
-        aboutCards.forEach(card => {
-            const cardEl = document.createElement('div');
-            cardEl.className = 'about-card reveal';
-            cardEl.innerHTML = `
-                <h3>${t(card.titleKey)}</h3>
-                <p>${t(card.contentKey)}</p>
-            `;
-            aboutGrid.appendChild(cardEl);
-        });
-
-        // Populate Experience
-        if (data.experience) {
-            document.getElementById('experience-title').innerText = t('experienceTitle');
-            const experienceTimeline = document.getElementById('experience-timeline');
-            data.experience.items.forEach(exp => {
-                const expEl = document.createElement('div');
-                expEl.className = 'experience-item reveal';
-                expEl.innerHTML = `
-                    <div class="exp-header">
-                        <div class="exp-role-company">
-                            <h3>${exp.role}</h3>
-                            <h4>${exp.company}</h4>
-                        </div>
-                        <span class="exp-duration">${exp.duration}</span>
-                    </div>
-                    <div class="exp-body">
-                        <ul>
-                            ${exp.description.map(desc => `<li>${desc}</li>`).join('')}
-                        </ul>
-                        <div class="exp-tech">
-                            <strong>Tech:</strong> ${exp.tech_stack}
-                        </div>
-                    </div>
+        if (aboutGrid && data.about) {
+            const aboutCards = [
+                { titleKey: 'aboutStoryTitle', contentKey: 'aboutStoryContent' },
+                { titleKey: 'aboutProfileTitle', contentKey: 'aboutProfileContent' }
+            ];
+            aboutGrid.innerHTML = '';
+            aboutCards.forEach(card => {
+                const cardEl = document.createElement('div');
+                cardEl.className = 'about-card reveal';
+                cardEl.innerHTML = `
+                    <h3>${t(card.titleKey)}</h3>
+                    <p>${t(card.contentKey)}</p>
                 `;
-                experienceTimeline.appendChild(expEl);
+                aboutGrid.appendChild(cardEl);
             });
         }
 
+        // Populate Experience
+        if (data.experience) {
+            const expTitle = document.getElementById('experience-title');
+            if (expTitle) expTitle.innerText = t('experienceTitle');
+            
+            const experienceTimeline = document.getElementById('experience-timeline');
+            if (experienceTimeline) {
+                experienceTimeline.innerHTML = '';
+                data.experience.items.forEach(exp => {
+                    const expEl = document.createElement('div');
+                    expEl.className = 'experience-item reveal';
+                    expEl.innerHTML = `
+                        <div class="exp-header">
+                            <div class="exp-role-company">
+                                <h3>${exp.role}</h3>
+                                <h4>${exp.company}</h4>
+                            </div>
+                            <span class="exp-duration">${exp.duration}</span>
+                        </div>
+                        <div class="exp-body">
+                            <ul>
+                                ${exp.description.map(desc => `<li>${desc}</li>`).join('')}
+                            </ul>
+                            <div class="exp-tech">
+                                <strong>Tech:</strong> ${exp.tech_stack}
+                            </div>
+                        </div>
+                    `;
+                    experienceTimeline.appendChild(expEl);
+                });
+            }
+        }
+
         // Populate Skills
-        document.getElementById('skills-title').innerText = t('skillsTitle');
-        const skillsContainer = document.getElementById('skills-container');
-        data.skills.list.forEach(skill => {
-            const skillEl = document.createElement('div');
-            skillEl.className = 'skill-tag';
-            skillEl.innerText = skill;
-            skillsContainer.appendChild(skillEl);
-        });
+        if (data.skills) {
+            const skillsTitle = document.getElementById('skills-title');
+            if (skillsTitle) skillsTitle.innerText = t('skillsTitle');
+            
+            const skillsContainer = document.getElementById('skills-container');
+            if (skillsContainer) {
+                skillsContainer.innerHTML = '';
+                data.skills.list.forEach(skill => {
+                    const skillEl = document.createElement('div');
+                    skillEl.className = 'skill-tag';
+                    skillEl.innerText = skill;
+                    skillsContainer.appendChild(skillEl);
+                });
+            }
+        }
 
         // Initial render for static sections
         refreshDynamicEvents();
@@ -197,7 +226,8 @@ async function initPortfolio() {
                         color: color,
                         repo: repo.full_name,
                         branch: repo.default_branch || 'main',
-                        images: [`https://opengraph.githubassets.com/1/${repo.full_name}`],
+                        // OPTIMIZED: Wrap OpenGraph image in proxy
+                        images: [optimizeImageUrl(`https://opengraph.githubassets.com/1/${repo.full_name}`)],
                         description: repo.description || 'No description available for this repository.',
                         link: repo.homepage && repo.homepage !== "" ? repo.homepage : repo.html_url
                     };
@@ -207,6 +237,7 @@ async function initPortfolio() {
             console.error('Error fetching GitHub repos:', e);
             // Will fallback to data.js projects if fetch fails
         }
+
 
         // Populate Projects
         document.getElementById('projects-title').innerText = t('projectsTitle');
@@ -225,10 +256,6 @@ async function initPortfolio() {
             `;
             projectGrid.appendChild(projectEl);
         });
-
-        // Init horizontal scroll now that all cards are in the DOM
-        // Use requestAnimationFrame so browser has painted before we measure widths
-        requestAnimationFrame(() => setupHorizontalScroll());
 
         // Init horizontal scroll now that all cards are in the DOM
         // Use requestAnimationFrame so browser has painted before we measure widths
@@ -254,7 +281,7 @@ async function initPortfolio() {
                         if (!url.startsWith('http')) {
                             url = `https://raw.githubusercontent.com/${p.repo}/${p.branch}/${url.replace(/^\.\//, '')}`;
                         }
-                        images.push(url);
+                        images.push(optimizeImageUrl(url));
                     }
                 }
 
