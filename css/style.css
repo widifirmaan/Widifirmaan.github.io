@@ -288,17 +288,20 @@ body.loading {
 /* Hero Section */
 /* Hero & Curtain Effect */
 .hero {
-    height: 100vh;
+    height: 100vh; /* Fallback */
+    height: 100dvh;
     width: 100%;
     position: fixed;
     top: 0;
     left: 0;
+    bottom: 0;
     z-index: 100;
     overflow: hidden;
     display: flex;
     pointer-events: none;
     /* Let clicks pass to content below when open */
 }
+
 
 .curtain-panel {
     height: 100%;
@@ -1241,8 +1244,10 @@ body.loading {
 
 /* Scroll Trigger Spacer */
 .scroll-trigger {
-    height: 100vh;
+    height: 100vh; /* Fallback */
+    height: 100dvh;
 }
+
 
 .curtain-info {
     position: absolute;
