@@ -230,67 +230,78 @@ async function initPortfolio() {
         // Use requestAnimationFrame so browser has painted before we measure widths
         requestAnimationFrame(() => setupHorizontalScroll());
 
-        // Fetch READMEs for thumbnails asynchronously
-        data.projects.list.forEach((p, idx) => {
-            if (p.repo) {
-                fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/README.md`)
-                    .then(response => {
-                        if (!response.ok) {
-                            return fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/Readme.md`)
-                                .then(res => {
-                                    if (!res.ok) {
-                                        return fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/readme.md`);
-                                    }
-                                    return res;
-                                });
+        // Init horizontal scroll now that all cards are in the DOM
+        // Use requestAnimationFrame so browser has painted before we measure widths
+        requestAnimationFrame(() => setupHorizontalScroll());
+
+        // Fetch READMEs for thumbnails and PRELOAD them
+        const readmePromises = data.projects.list.map(async (p, idx) => {
+            if (!p.repo) return;
+            try {
+                const response = await fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/README.md`)
+                    .then(res => res.ok ? res : fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/Readme.md`))
+                    .then(res => res.ok ? res : fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/readme.md`));
+
+                if (!response.ok) throw new Error('README not found');
+                const text = await response.text();
+                
+                const imgRegex = /!\[.*?\]\(((?:[^)(]+|\([^)(]*\))+)\)|<img.*?src=["'](.*?)["']/g;
+                let images = [];
+                let match;
+                while ((match = imgRegex.exec(text)) !== null) {
+                    let url = match[1] || match[2];
+                    if (url && !url.includes('shields.io') && !url.includes('badge')) {
+                        if (!url.startsWith('http')) {
+                            url = `https://raw.githubusercontent.com/${p.repo}/${p.branch}/${url.replace(/^\.\//, '')}`;
                         }
-                        return response;
-                    })
-                    .then(response => {
-                        if (!response.ok) throw new Error('README not found');
-                        return response.text();
-                    })
-                    .then(text => {
-                        const imgRegex = /!\[.*?\]\(((?:[^)(]+|\([^)(]*\))+)\)|<img.*?src=["'](.*?)["']/g;
-                        let images = [];
-                        let match;
-                        while ((match = imgRegex.exec(text)) !== null) {
-                            let url = match[1] || match[2];
-                            if (url && !url.includes('shields.io') && !url.includes('badge')) {
-                                if (!url.startsWith('http')) {
-                                    url = `https://raw.githubusercontent.com/${p.repo}/${p.branch}/${url.replace(/^\.\//, '')}`;
-                                }
-                                images.push(url);
-                            }
+                        images.push(url);
+                    }
+                }
+
+                // Remove duplicates
+                images = [...new Set(images)];
+
+                if (images.length > 0) {
+                    p.images = images;
+                    const imgContainer = document.getElementById(`project-image-${idx}`);
+                    if (imgContainer) {
+                        let gridClass = 'project-image-grid-1';
+                        if (images.length === 2) gridClass = 'project-image-grid-2';
+                        else if (images.length === 3) gridClass = 'project-image-grid-3';
+                        else if (images.length >= 4) gridClass = 'project-image-grid-4';
+
+                        imgContainer.className = `project-image project-image-grid ${gridClass}`;
+                        imgContainer.style.backgroundColor = 'var(--black)';
+
+                        const numImages = Math.min(images.length, 4);
+                        let html = '';
+                        for (let i = 0; i < numImages; i++) {
+                            html += `<img src="${images[i]}" alt="${p.title}">`;
                         }
-
-                        // Remove duplicates
-                        images = [...new Set(images)];
-
-                        if (images.length > 0) {
-                            p.images = images; // Update data so modal gets these
-                            const imgContainer = document.getElementById(`project-image-${idx}`);
-                            if (imgContainer) {
-                                let gridClass = 'project-image-grid-1';
-                                if (images.length === 2) gridClass = 'project-image-grid-2';
-                                else if (images.length === 3) gridClass = 'project-image-grid-3';
-                                else if (images.length >= 4) gridClass = 'project-image-grid-4';
-
-                                imgContainer.className = `project-image project-image-grid ${gridClass}`;
-                                imgContainer.style.backgroundColor = 'var(--black)';
-
-                                const numImages = Math.min(images.length, 4);
-                                let html = '';
-                                for (let i = 0; i < numImages; i++) {
-                                    html += `<img src="${images[i]}" alt="${p.title}">`;
-                                }
-                                imgContainer.innerHTML = html;
-                            }
-                        }
-                    })
-                    .catch(err => { });
+                        imgContainer.innerHTML = html;
+                    }
+                }
+            } catch (err) {
+                // Silently fail if README not found
             }
         });
+
+        // Wait for all README lookups
+        await Promise.all(readmePromises);
+
+        // EXTRA: Preload all final image URLs to ensure they are in browser cache
+        const allImageUrls = data.projects.list.flatMap(p => p.images || []);
+        if (allImageUrls.length > 0) {
+            const preloadPromises = allImageUrls.map(url => {
+                return new Promise((resolve) => {
+                    const img = new Image();
+                    img.onload = resolve;
+                    img.onerror = resolve; // Continue even if one image fails
+                    img.src = url;
+                });
+            });
+            await Promise.all(preloadPromises);
+        }
 
         // Modal Logic
         const modal = document.getElementById('project-modal');
@@ -610,14 +621,15 @@ async function initPreloader() {
             revealed.hero = true;
         }
 
-        if (percentage >= 100) {
-            percentage = 100;
+        if (percentage >= 99) {
+            percentage = 99;
             clearInterval(interval);
             finishLoading();
         }
         
         percentageText.innerText = `${percentage}%`;
     }, 80);
+
 
     async function finishLoading() {
         await portfolioPromise;
