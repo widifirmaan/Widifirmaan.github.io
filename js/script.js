@@ -226,6 +226,10 @@ async function initPortfolio() {
             projectGrid.appendChild(projectEl);
         });
 
+        // Init horizontal scroll now that all cards are in the DOM
+        // Use requestAnimationFrame so browser has painted before we measure widths
+        requestAnimationFrame(() => setupHorizontalScroll());
+
         // Fetch READMEs for thumbnails asynchronously
         data.projects.list.forEach((p, idx) => {
             if (p.repo) {
@@ -480,6 +484,47 @@ document.addEventListener('mousemove', (e) => {
 // Curtain Scroll Animation
 const leftPanel = document.querySelector('.curtain-panel.left');
 const rightPanel = document.querySelector('.curtain-panel.right');
+
+// ─── Horizontal Scroll – Projects ───────────────────────────────────────────
+function setupHorizontalScroll() {
+    const outer = document.getElementById('projects-scroll-outer');
+    const grid = document.getElementById('project-grid');
+    if (!outer || !grid) return;
+
+    // Total scroll distance = extra width of the track (cards that overflow)
+    const totalWidth = grid.scrollWidth;
+    const viewportWidth = window.innerWidth;
+    const scrollDistance = totalWidth - viewportWidth + viewportWidth * 0.1; // keep 10vw gap at end
+
+    // Give the outer div enough height so the sticky element has room to "scroll"
+    // We add one viewport height so the section header is visible before cards start moving
+    outer.style.height = `calc(100vh + ${scrollDistance}px)`;
+}
+
+function updateHorizontalScroll() {
+    const outer = document.getElementById('projects-scroll-outer');
+    const grid = document.getElementById('project-grid');
+    if (!outer || !grid) return;
+
+    const outerRect = outer.getBoundingClientRect();
+    const totalScrollable = outer.offsetHeight - window.innerHeight;
+
+    // outerRect.top is negative once we've scrolled past the outer start
+    const scrolled = -outerRect.top;
+    if (scrolled < 0 || scrolled > totalScrollable) return;
+
+    const progress = scrolled / totalScrollable; // 0 → 1
+    const totalWidth = grid.scrollWidth;
+    const viewportWidth = window.innerWidth;
+    const maxShift = totalWidth - viewportWidth + viewportWidth * 0.1;
+    const shift = progress * maxShift;
+
+    grid.style.transform = `translateX(-${shift}px)`;
+}
+
+// Re-calculate on resize
+window.addEventListener('resize', setupHorizontalScroll);
+
 // Re-selected in refreshDynamicEvents if needed, but for scroll we can select here
 window.addEventListener('scroll', () => {
     const heroText = document.getElementById('hero-content');
@@ -519,11 +564,85 @@ window.addEventListener('scroll', () => {
         hero.style.opacity = '1';
         hero.style.visibility = 'visible';
     }
+
+    // Drive horizontal scroll for projects
+    updateHorizontalScroll();
 });
+
+// ─── Preloader & Sequential Reveal ──────────────────────────────────────────
+async function initPreloader() {
+    const preloader = document.getElementById('preloader');
+    const percentageText = document.getElementById('preloader-percentage');
+    const mainContent = document.getElementById('main-content');
+    const revealItems = document.querySelectorAll('.reveal-item');
+    
+    document.body.classList.add('loading');
+    
+    let percentage = 0;
+    const startTime = Date.now();
+    const minDuration = 2500;
+    
+    // Start portfolio initialization immediately
+    const portfolioPromise = initPortfolio();
+    
+    // Flags to ensure items only reveal once
+    const revealed = {
+        navbar: false,
+        marquee: false,
+        hero: false
+    };
+
+    const interval = setInterval(() => {
+        const increment = Math.max(1, Math.floor((100 - percentage) / 10));
+        percentage += increment;
+        
+        // Progress-based falling reveal
+        if (percentage >= 20 && !revealed.navbar) {
+            revealItems[0]?.classList.add('show');
+            revealed.navbar = true;
+        }
+        if (percentage >= 50 && !revealed.marquee) {
+            revealItems[1]?.classList.add('show');
+            revealed.marquee = true;
+        }
+        if (percentage >= 80 && !revealed.hero) {
+            revealItems[2]?.classList.add('show');
+            revealed.hero = true;
+        }
+
+        if (percentage >= 100) {
+            percentage = 100;
+            clearInterval(interval);
+            finishLoading();
+        }
+        
+        percentageText.innerText = `${percentage}%`;
+    }, 80);
+
+    async function finishLoading() {
+        await portfolioPromise;
+        const elapsedTime = Date.now() - startTime;
+        const remaining = Math.max(0, minDuration - elapsedTime);
+        
+        setTimeout(() => {
+            // Fade out preloader content (percentage)
+            const content = document.querySelector('.preloader-content');
+            if (content) content.classList.add('fade-out');
+            
+            setTimeout(() => {
+                preloader.style.display = 'none';
+                document.body.classList.remove('loading');
+                
+                // Ensure all items are shown if they weren't yet
+                revealItems.forEach(item => item.classList.add('show'));
+            }, 800);
+        }, remaining);
+    }
+}
 
 // Initialize on Load
 document.addEventListener('DOMContentLoaded', () => {
-    initPortfolio();
+    initPreloader();
 
     // Language Switcher Logic
     const langToggle = document.getElementById('lang-toggle');

@@ -47,6 +47,85 @@ body::before {
 }
 
 
+/* Preloader Styles - Transparent & Falling */
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent; /* Removed backdrop */
+    color: var(--black); /* Contrast against white background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    pointer-events: none; /* Allow interaction with site items as they fall */
+}
+
+.preloader-content {
+    text-align: center;
+    width: 300px;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border: var(--border);
+    box-shadow: var(--shadow);
+    transition: opacity 0.8s ease;
+}
+
+.preloader-content.fade-out {
+    opacity: 0;
+}
+
+.preloader-text {
+    font-size: 1.2rem;
+    font-weight: 900;
+    letter-spacing: 5px;
+    margin-bottom: 20px;
+    animation: pulse 2s infinite;
+}
+
+.preloader-percentage {
+    font-size: 4rem;
+    font-weight: 900;
+    margin-bottom: 0px;
+}
+
+.preloader-bar-container {
+    display: none; /* Cleaner look without the bar for this style */
+}
+
+@keyframes pulse {
+    0% { opacity: 0.5; }
+    50% { opacity: 1; }
+    100% { opacity: 0.5; }
+}
+
+/* Main Content Visibility */
+.main-content-hidden {
+    opacity: 1; /* Site is visible immediately */
+    visibility: visible;
+}
+
+/* Sequential Falling Reveal */
+.reveal-item {
+    opacity: 0;
+    transform: translateY(-150px); /* Falling from top */
+    transition: opacity 1.2s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.reveal-item.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+body.loading {
+    overflow: hidden;
+}
+
+
 /* Custom Cursor */
 .custom-cursor {
     width: 20px;
@@ -519,12 +598,43 @@ body::before {
     text-decoration: underline;
 }
 
-/* Project Grid */
+/* Horizontal Scroll – Projects */
+.projects-scroll-outer {
+    /* height is set dynamically by JS based on card count */
+    position: relative;
+}
+
+.projects-scroll-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* The section header inside the sticky pane */
+.projects-scroll-sticky .section.projects {
+    padding-bottom: 0;
+    border-bottom: none;
+    flex-shrink: 0;
+}
+
+.projects-track-wrapper {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+/* Project Grid – now a horizontal flex row */
 .project-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    /* Adjusted min-width for narrower space */
+    display: flex;
+    flex-direction: row;
     gap: 40px;
+    padding: 0 5%;
+    will-change: transform;
+    /* translateX driven by JS */
 }
 
 
@@ -533,12 +643,15 @@ body::before {
     border: var(--border);
     box-shadow: var(--shadow);
     overflow: hidden;
-    transition: 0.3s;
+    transition: transform 0.3s, box-shadow 0.3s;
+    flex-shrink: 0;
+    width: 360px;
 }
 
 .project-card:hover {
     transform: rotate(-1deg) scale(1.02);
 }
+
 
 .project-image {
     height: 250px;
@@ -785,16 +898,16 @@ body::before {
     transform: translateX(0) skewX(0);
 }
 
-/* Project Section: Cascade Reveal */
+/* Project Section: Cards start visible (horizontal layout) */
 .project-card {
-    opacity: 0;
-    transform: translateY(50px) rotate(-3deg);
-    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity: 1;
+    transform: none;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .project-card.active {
     opacity: 1;
-    transform: translateY(0) rotate(0);
+    transform: none;
 }
 
 /* Experience Section: Cascade Reveal */
@@ -1421,5 +1534,35 @@ body::before {
     .marquee {
         font-size: 0.9rem;
         padding: 10px 0;
+    }
+}
+
+/* ─── Mobile: revert projects to vertical grid ─────────────────────────────── */
+@media (max-width: 768px) {
+    .projects-scroll-outer {
+        height: auto !important;
+    }
+
+    .projects-scroll-sticky {
+        position: static;
+        height: auto;
+        overflow: visible;
+    }
+
+    .projects-track-wrapper {
+        overflow: visible;
+        display: block;
+    }
+
+    .project-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 0 5%;
+        transform: none !important;
+    }
+
+    .project-card {
+        width: 100%;
     }
 }
