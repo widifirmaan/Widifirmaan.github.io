@@ -209,6 +209,10 @@ async function initPortfolio() {
         // Fetch GitHub Projects dynamically
         try {
             const githubRes = await fetch('https://api.github.com/users/widifirmaan/repos?sort=updated&type=owner&per_page=100');
+            if (githubRes.status === 404) {
+                if (window.skipPreloader) window.skipPreloader();
+                return;
+            }
             if (githubRes.ok) {
                 const repos = await githubRes.json();
                 const colors = ['#00E5FF', '#FF5E5B', '#FFFF00', '#FFC0CB', '#00FF00', '#FFFFFF'];
@@ -475,11 +479,17 @@ const observer = new IntersectionObserver((entries) => {
 
             if (entry.target.classList.contains('skills-container')) {
                 const tags = entry.target.querySelectorAll('.skill-tag');
+                if (entry.target._timeouts) {
+                    entry.target._timeouts.forEach(t => clearTimeout(t));
+                }
+                entry.target._timeouts = [];
+
                 tags.forEach((tag, i) => {
-                    setTimeout(() => {
+                    const t = setTimeout(() => {
                         tag.style.opacity = '1';
                         tag.style.transform = 'translateY(0) scale(1)';
                     }, i * 100);
+                    entry.target._timeouts.push(t);
                 });
             }
 
@@ -500,9 +510,34 @@ const observer = new IntersectionObserver((entries) => {
                     }, i * 200);
                 });
             }
+        } else {
+            // Re-trigger by removing active class when out of view
+            entry.target.classList.remove('active');
 
-            // Stop observing — animate only once
-            observer.unobserve(entry.target);
+            if (entry.target.classList.contains('skills-container')) {
+                if (entry.target._timeouts) {
+                    entry.target._timeouts.forEach(t => clearTimeout(t));
+                }
+                const tags = entry.target.querySelectorAll('.skill-tag');
+                tags.forEach((tag) => {
+                    tag.style.opacity = '0';
+                    tag.style.transform = 'translateY(20px) scale(0.9)';
+                });
+            }
+
+            if (entry.target.classList.contains('project-grid')) {
+                const cards = entry.target.querySelectorAll('.project-card');
+                cards.forEach((card) => {
+                    card.classList.remove('active');
+                });
+            }
+
+            if (entry.target.classList.contains('experience-timeline')) {
+                const items = entry.target.querySelectorAll('.experience-item');
+                items.forEach((item) => {
+                    item.classList.remove('active');
+                });
+            }
         }
     });
 }, observerOptions);
@@ -675,6 +710,13 @@ async function initPreloader() {
 
     // Start portfolio initialization immediately
     const portfolioPromise = initPortfolio();
+    let interval;
+
+    // Support immediate exit on 404 or critical error
+    window.skipPreloader = () => {
+        if (interval) clearInterval(interval);
+        finishLoading(true);
+    };
 
     // Flags to ensure items only reveal once
     const revealed = {
@@ -683,7 +725,7 @@ async function initPreloader() {
         hero: false
     };
 
-    const interval = setInterval(() => {
+    interval = setInterval(() => {
         const increment = Math.max(1, Math.floor((100 - percentage) / 10));
         percentage += increment;
 
@@ -711,10 +753,10 @@ async function initPreloader() {
     }, 80);
 
 
-    async function finishLoading() {
+    async function finishLoading(isImmediate = false) {
         await portfolioPromise;
         const elapsedTime = Date.now() - startTime;
-        const remaining = Math.max(0, minDuration - elapsedTime);
+        const remaining = isImmediate ? 0 : Math.max(0, minDuration - elapsedTime);
 
         setTimeout(() => {
             // Fade out preloader content (percentage)
@@ -727,14 +769,18 @@ async function initPreloader() {
 
                 // Ensure all items are shown if they weren't yet
                 revealItems.forEach(item => item.classList.add('show'));
-            }, 800);
+            }, isImmediate ? 0 : 800);
         }, remaining);
     }
 }
 
 // Initialize on Load
 document.addEventListener('DOMContentLoaded', () => {
-    initPreloader();
+    // initPreloader(); 
+    initPortfolio();
+    document.getElementById('preloader').style.display = 'none';
+    document.body.classList.remove('loading');
+    document.querySelectorAll('.reveal-item').forEach(item => item.classList.add('show'));
 
     // Language Switcher Logic
     const langToggle = document.getElementById('lang-toggle');

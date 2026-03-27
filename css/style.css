@@ -63,7 +63,8 @@ body::before {
     align-items: center;
     z-index: 10000;
     pointer-events: none;
-    /* Allow interaction with site items as they fall */
+    display: none !important;
+    /* Temporarily disabled */
 }
 
 .preloader-content {
@@ -136,7 +137,7 @@ body::before {
 }
 
 body.loading {
-    overflow: hidden;
+    /* overflow: hidden; Temporarily disabled */
 }
 
 
