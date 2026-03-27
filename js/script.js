@@ -587,10 +587,17 @@ window.addEventListener('scroll', () => {
         progressBar.style.height = globalProgress + '%';
     }
 
+    const marquee = document.querySelector('.marquee');
+    if (marquee) {
+        marquee.style.opacity = 1 - curtainProgress;
+        marquee.style.transform = `translateY(-${curtainProgress * 30}px)`;
+    }
+
     if (heroText) {
         heroText.style.opacity = 1 - curtainProgress;
         heroText.style.transform = `translateY(-${curtainProgress * 50}px)`;
     }
+
 
     const hero = document.querySelector('.hero');
     if (curtainProgress >= 1) {
