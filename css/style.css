@@ -54,13 +54,16 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: transparent; /* Removed backdrop */
-    color: var(--black); /* Contrast against white background */
+    background-color: transparent;
+    /* Removed backdrop */
+    color: var(--black);
+    /* Contrast against white background */
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 10000;
-    pointer-events: none; /* Allow interaction with site items as they fall */
+    pointer-events: none;
+    /* Allow interaction with site items as they fall */
 }
 
 .preloader-content {
@@ -93,27 +96,38 @@ body::before {
 }
 
 .preloader-bar-container {
-    display: none; /* Cleaner look without the bar for this style */
+    display: none;
+    /* Cleaner look without the bar for this style */
 }
 
 @keyframes pulse {
-    0% { opacity: 0.5; }
-    50% { opacity: 1; }
-    100% { opacity: 0.5; }
+    0% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.5;
+    }
 }
 
 /* Main Content Visibility */
 .main-content-hidden {
-    opacity: 1; /* Site is visible immediately */
+    opacity: 1;
+    /* Site is visible immediately */
     visibility: visible;
 }
 
 /* Sequential Falling Reveal */
 .reveal-item {
     opacity: 0;
-    transform: translateY(-150px); /* Falling from top */
-    transition: opacity 1.2s cubic-bezier(0.34, 1.56, 0.64, 1), 
-                transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: translateY(-150px);
+    /* Falling from top */
+    transition: opacity 1.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+        transform 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .reveal-item.show {
@@ -288,7 +302,8 @@ body.loading {
 /* Hero Section */
 /* Hero & Curtain Effect */
 .hero {
-    height: 100vh; /* Fallback */
+    height: 100vh;
+    /* Fallback */
     height: 100dvh;
     width: 100%;
     position: fixed;
@@ -721,33 +736,53 @@ body.loading {
 .experience-timeline {
     display: flex;
     flex-direction: column;
-    gap: 40px;
+    gap: 0;
+    /* Gap handled by margin-bottom for stacking */
     position: relative;
+    padding-bottom: 1px;
+    /* Extra space at bottom */
 }
 
+/* Timeline line removed for card stacking aesthetic */
 .experience-timeline::before {
-    content: '';
-    position: absolute;
-    left: 20px;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: var(--black);
     display: none;
-    /* Hide on larger screens if using cards, or keep for timeline */
 }
+
+.experience .section-title {
+    position: sticky;
+    top: 120px;
+    /* Below navbar + marquee */
+    z-index: 100;
+    background-color: var(--bg);
+    padding: 20px 0;
+    margin-bottom: 40px;
+}
+
 
 .experience-item {
     background: var(--white);
     border: var(--border);
-    padding: 30px;
+    padding: 60px 40px;
+    /* More premium padding */
     box-shadow: var(--shadow);
-    transition: 0.3s;
-    position: relative;
+    transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease;
+    position: sticky;
+    top: calc(280px + (var(--index) * 40px));
+    /* Shifted down to clear sticky title */
+    /* Fanned-out stacking offset */
+    margin-bottom: 30vh;
+    /* Space to allow scrolling into the stack */
+    transform-origin: top center;
+    will-change: transform, filter, opacity;
+}
+
+
+.experience-item:last-child {
+    margin-bottom: 0;
 }
 
 .experience-item:hover {
-    transform: translate(-4px, -4px);
+
     box-shadow: 12px 12px 0px 0px var(--black);
 }
 
@@ -756,11 +791,14 @@ body.loading {
     justify-content: space-between;
     align-items: flex-start;
     border-bottom: 2px solid var(--black);
-    padding-bottom: 15px;
-    margin-bottom: 20px;
+    padding-bottom: 8px;
+    /* Reduced from 15px */
+    margin-bottom: 12px;
+    /* Reduced from 20px */
     flex-wrap: wrap;
     gap: 15px;
 }
+
 
 .exp-role-company h3 {
     font-size: 1.8rem;
@@ -1244,7 +1282,8 @@ body.loading {
 
 /* Scroll Trigger Spacer */
 .scroll-trigger {
-    height: 100vh; /* Fallback */
+    height: 100vh;
+    /* Fallback */
     height: 100dvh;
 }
 

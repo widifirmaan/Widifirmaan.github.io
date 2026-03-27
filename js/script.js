@@ -132,7 +132,7 @@ async function initPortfolio() {
         // Populate About
         const aboutTitle = document.getElementById('about-title');
         if (aboutTitle) aboutTitle.innerText = t('aboutTitle');
-        
+
         const aboutGrid = document.getElementById('about-grid');
         if (aboutGrid && data.about) {
             const aboutCards = [
@@ -155,14 +155,16 @@ async function initPortfolio() {
         if (data.experience) {
             const expTitle = document.getElementById('experience-title');
             if (expTitle) expTitle.innerText = t('experienceTitle');
-            
+
             const experienceTimeline = document.getElementById('experience-timeline');
             if (experienceTimeline) {
                 experienceTimeline.innerHTML = '';
-                data.experience.items.forEach(exp => {
+                data.experience.items.forEach((exp, idx) => {
                     const expEl = document.createElement('div');
                     expEl.className = 'experience-item reveal';
+                    expEl.style.setProperty('--index', idx);
                     expEl.innerHTML = `
+
                         <div class="exp-header">
                             <div class="exp-role-company">
                                 <h3>${exp.role}</h3>
@@ -188,7 +190,7 @@ async function initPortfolio() {
         if (data.skills) {
             const skillsTitle = document.getElementById('skills-title');
             if (skillsTitle) skillsTitle.innerText = t('skillsTitle');
-            
+
             const skillsContainer = document.getElementById('skills-container');
             if (skillsContainer) {
                 skillsContainer.innerHTML = '';
@@ -271,7 +273,7 @@ async function initPortfolio() {
 
                 if (!response.ok) throw new Error('README not found');
                 const text = await response.text();
-                
+
                 const imgRegex = /!\[.*?\]\(((?:[^)(]+|\([^)(]*\))+)\)|<img.*?src=["'](.*?)["']/g;
                 let images = [];
                 let match;
@@ -612,7 +614,51 @@ window.addEventListener('scroll', () => {
 
     // Drive horizontal scroll for projects
     updateHorizontalScroll();
+
+    // Drive Experience Stacking effect
+    updateExperienceStacking();
 });
+
+// ─── Experience Stacking Effect ───────────────────────────────────────────
+function updateExperienceStacking() {
+    const items = document.querySelectorAll('.experience-item');
+    if (!items.length) return;
+
+    const stickyTop = 280; // Match CSS top (below sticky title)
+
+
+
+    items.forEach((item, index) => {
+        const nextItem = items[index + 1];
+        if (!nextItem) return;
+
+        const rect = item.getBoundingClientRect();
+        const nextRect = nextItem.getBoundingClientRect();
+
+        // Calculate how much the NEXT card is covering this one
+        // Transition starts when next card's top reaches this card's bottom
+        const startPoint = rect.bottom;
+        const endPoint = rect.top + 50; // overlap finishes when next card is almost fully over
+
+        const distance = startPoint - endPoint;
+        const progress = Math.max(0, Math.min(1, (startPoint - nextRect.top) / distance));
+
+        if (progress > 0) {
+            const scale = 1 - (progress * 0.05); // Shrink to 95%
+            const brightness = 1 - (progress * 0.4); // Dim to 60%
+            const blur = progress * 2; // Slight blur
+
+            item.style.transform = `scale(${scale})`;
+            item.style.filter = `brightness(${brightness}) blur(${blur}px)`;
+            item.style.opacity = 1 - (progress * 0.3); // Fade slightly
+        } else {
+            item.style.transform = 'scale(1)';
+            item.style.filter = 'brightness(1) blur(0px)';
+            item.style.opacity = '1';
+        }
+    });
+}
+
 
 // ─── Preloader & Sequential Reveal ──────────────────────────────────────────
 async function initPreloader() {
@@ -620,16 +666,16 @@ async function initPreloader() {
     const percentageText = document.getElementById('preloader-percentage');
     const mainContent = document.getElementById('main-content');
     const revealItems = document.querySelectorAll('.reveal-item');
-    
+
     document.body.classList.add('loading');
-    
+
     let percentage = 0;
     const startTime = Date.now();
     const minDuration = 2500;
-    
+
     // Start portfolio initialization immediately
     const portfolioPromise = initPortfolio();
-    
+
     // Flags to ensure items only reveal once
     const revealed = {
         navbar: false,
@@ -640,7 +686,7 @@ async function initPreloader() {
     const interval = setInterval(() => {
         const increment = Math.max(1, Math.floor((100 - percentage) / 10));
         percentage += increment;
-        
+
         // Progress-based falling reveal
         if (percentage >= 20 && !revealed.navbar) {
             revealItems[0]?.classList.add('show');
@@ -660,7 +706,7 @@ async function initPreloader() {
             clearInterval(interval);
             finishLoading();
         }
-        
+
         percentageText.innerText = `${percentage}%`;
     }, 80);
 
@@ -669,16 +715,16 @@ async function initPreloader() {
         await portfolioPromise;
         const elapsedTime = Date.now() - startTime;
         const remaining = Math.max(0, minDuration - elapsedTime);
-        
+
         setTimeout(() => {
             // Fade out preloader content (percentage)
             const content = document.querySelector('.preloader-content');
             if (content) content.classList.add('fade-out');
-            
+
             setTimeout(() => {
                 preloader.style.display = 'none';
                 document.body.classList.remove('loading');
-                
+
                 // Ensure all items are shown if they weren't yet
                 revealItems.forEach(item => item.classList.add('show'));
             }, 800);
