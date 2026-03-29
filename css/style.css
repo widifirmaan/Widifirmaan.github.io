@@ -1600,10 +1600,11 @@ body::before {
 
     /* Support for Notch/Dynamic Island - White status bar area */
     .navbar {
-        height: calc(70px + env(safe-area-inset-top));
-        /* padding-top: env(safe-area-inset-top); */
+        height: auto;
+        padding: calc(20px + env(safe-area-inset-top)) 5% 20px;
         align-items: center;
-        background-color: #ffffff;
+        background: #ffffff !important;
+        opacity: 1 !important;
     }
 }
 
