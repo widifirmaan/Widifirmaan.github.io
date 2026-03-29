@@ -1539,7 +1539,8 @@ body::before {
         border-left: none;
         border-top: 2px solid var(--black);
         margin-bottom: 0;
-        padding-bottom: env(safe-area-inset-bottom); /* Ensure it goes behind address bar */
+        padding-bottom: env(safe-area-inset-bottom);
+        /* Ensure it goes behind address bar */
     }
 
     .hero-visual {
@@ -1552,12 +1553,14 @@ body::before {
 
     .nav-actions {
         gap: 8px;
-        align-items: stretch; /* Ensure children can have same height */
+        align-items: stretch;
+        /* Ensure children can have same height */
     }
 
     .lang-btn,
     .nav-cta {
-        height: 38px; /* Fixed height to match */
+        height: 38px;
+        /* Fixed height to match */
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1591,14 +1594,16 @@ body::before {
     .marquee {
         font-size: 0.9rem;
         padding: 10px 0;
-        top: calc(70px + env(safe-area-inset-top)); /* Adjust for navbar height */
+        top: calc(70px + env(safe-area-inset-top));
+        /* Adjust for navbar height */
     }
 
     /* Support for Notch/Dynamic Island - White status bar area */
     .navbar {
         height: calc(70px + env(safe-area-inset-top));
-        padding-top: env(safe-area-inset-top);
+        /* padding-top: env(safe-area-inset-top); */
         align-items: center;
+        background-color: #ffffff;
     }
 }
 
