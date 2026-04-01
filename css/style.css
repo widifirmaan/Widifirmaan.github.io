@@ -758,6 +758,18 @@ body::before {
     background-color: var(--bg);
     padding: 20px 0;
     margin-bottom: 40px;
+    overflow: visible;
+}
+
+.experience .section-title::before {
+    content: '';
+    position: absolute;
+    top: -120px;
+    left: -50vw;
+    width: 200vw;
+    height: 160px;
+    background-color: var(--bg);
+    z-index: -1;
 }
 
 
