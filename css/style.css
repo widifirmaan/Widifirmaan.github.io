@@ -1622,6 +1622,16 @@ body::before {
         background: #ffffff !important;
         opacity: 1 !important;
     }
+
+    /* Curtain above navbar on mobile */
+    .navbar {
+        z-index: 5;
+    }
+
+    .curtain-panel.left,
+    .curtain-panel.right {
+        z-index: 10;
+    }
 }
 
 /* ─── Mobile: revert projects to vertical grid ─────────────────────────────── */
