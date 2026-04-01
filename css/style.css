@@ -1492,6 +1492,11 @@ body::before {
         display: none;
     }
 
+    .experience .section-title::before {
+        top: 0 !important;
+        height: 100px;
+    }
+
     .section {
         padding: 60px 8%;
         /* Mobile margin */
