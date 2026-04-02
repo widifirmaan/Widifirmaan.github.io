@@ -15,11 +15,7 @@ function setLanguage(lang) {
         const key = el.getAttribute('data-i18n');
         const translation = t(key);
         if (translation) {
-            if (key === 'marquee' || key === 'heroTitle') {
-                el.innerHTML = translation;
-            } else {
-                el.textContent = translation;
-            }
+            el.textContent = translation;
         }
     });
 
@@ -162,7 +158,6 @@ async function initPortfolio() {
                 data.experience.items.forEach((exp, idx) => {
                     const expEl = document.createElement('div');
                     expEl.className = 'experience-item reveal';
-                    expEl.style.setProperty('--index', idx);
                     expEl.innerHTML = `
 
                         <div class="exp-header">
@@ -203,14 +198,12 @@ async function initPortfolio() {
             }
         }
 
-        // Initial render for static sections
-        refreshDynamicEvents();
+
 
         // Fetch GitHub Projects dynamically
         try {
             const githubRes = await fetch('https://api.github.com/users/widifirmaan/repos?sort=updated&type=owner&per_page=100');
             if (githubRes.status === 404) {
-                if (window.skipPreloader) window.skipPreloader();
                 return;
             }
             if (githubRes.ok) {
@@ -414,12 +407,12 @@ async function initPortfolio() {
             document.body.style.overflow = 'auto';
         };
 
-        window.onclick = (event) => {
+        window.addEventListener('click', (event) => {
             if (event.target == modal) {
                 modal.style.display = 'none';
                 document.body.style.overflow = 'auto';
             }
-        };
+        });
 
         // Re-initialize observers and events after dynamic content is added
         refreshDynamicEvents();
@@ -459,11 +452,24 @@ function refreshDynamicEvents() {
     });
 }
 
-// Custom Cursor
+// Custom Cursor & Floating Shapes Parallax
 const cursor = document.querySelector('.custom-cursor');
 document.addEventListener('mousemove', (e) => {
+    // Move custom cursor
     cursor.style.left = e.clientX + 'px';
     cursor.style.top = e.clientY + 'px';
+
+    // Parallax for hero shapes
+    const shapes = document.querySelectorAll('.shape');
+    const x = e.clientX / window.innerWidth;
+    const y = e.clientY / window.innerHeight;
+
+    shapes.forEach((shape, idx) => {
+        const speed = (idx + 1) * 20;
+        const xOffset = (x - 0.5) * speed;
+        const yOffset = (y - 0.5) * speed;
+        shape.style.transform = `translate(${xOffset}px, ${yOffset}px) rotate(${15 * idx}deg)`;
+    });
 });
 
 // Intersection Observer for Reveal Animations
@@ -511,7 +517,6 @@ const observer = new IntersectionObserver((entries) => {
                 });
             }
         } else {
-            // Re-trigger by removing active class when out of view
             entry.target.classList.remove('active');
 
             if (entry.target.classList.contains('skills-container')) {
@@ -542,21 +547,7 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Dynamic Floating Shapes Parallax
-document.addEventListener('mousemove', (e) => {
-    const shapes = document.querySelectorAll('.shape');
-    const x = e.clientX / window.innerWidth;
-    const y = e.clientY / window.innerHeight;
 
-    shapes.forEach((shape, idx) => {
-        const speed = (idx + 1) * 20;
-        const xOffset = (x - 0.5) * speed;
-        const yOffset = (y - 0.5) * speed;
-        shape.style.transform = `translate(${xOffset}px, ${yOffset}px) rotate(${15 * idx}deg)`;
-    });
-});
-
-// Curtain Scroll Animation
 const leftPanel = document.querySelector('.curtain-panel.left');
 const rightPanel = document.querySelector('.curtain-panel.right');
 
@@ -624,11 +615,7 @@ window.addEventListener('scroll', () => {
         progressBar.style.height = globalProgress + '%';
     }
 
-    const marquee = document.querySelector('.marquee');
-    if (marquee) {
-        marquee.style.opacity = 1 - curtainProgress;
-        marquee.style.transform = `translateY(-${curtainProgress * 30}px)`;
-    }
+
 
     if (heroText) {
         heroText.style.opacity = 1 - curtainProgress;
@@ -649,138 +636,15 @@ window.addEventListener('scroll', () => {
 
     // Drive horizontal scroll for projects
     updateHorizontalScroll();
-
-    // Drive Experience Stacking effect
-    updateExperienceStacking();
 });
 
-// ─── Experience Stacking Effect ───────────────────────────────────────────
-function updateExperienceStacking() {
-    const items = document.querySelectorAll('.experience-item');
-    if (!items.length) return;
-
-    const stickyTop = 280; // Match CSS top (below sticky title)
 
 
-
-    items.forEach((item, index) => {
-        const nextItem = items[index + 1];
-        if (!nextItem) return;
-
-        const rect = item.getBoundingClientRect();
-        const nextRect = nextItem.getBoundingClientRect();
-
-        // Calculate how much the NEXT card is covering this one
-        // Transition starts when next card's top reaches this card's bottom
-        const startPoint = rect.bottom;
-        const endPoint = rect.top + 50; // overlap finishes when next card is almost fully over
-
-        const distance = startPoint - endPoint;
-        const progress = Math.max(0, Math.min(1, (startPoint - nextRect.top) / distance));
-
-        if (progress > 0) {
-            const scale = 1 - (progress * 0.05); // Shrink to 95%
-            const brightness = 1 - (progress * 0.4); // Dim to 60%
-            const blur = progress * 2; // Slight blur
-
-            item.style.transform = `scale(${scale})`;
-            item.style.filter = `brightness(${brightness}) blur(${blur}px)`;
-            item.style.opacity = 1 - (progress * 0.3); // Fade slightly
-        } else {
-            item.style.transform = 'scale(1)';
-            item.style.filter = 'brightness(1) blur(0px)';
-            item.style.opacity = '1';
-        }
-    });
-}
-
-
-// ─── Preloader & Sequential Reveal ──────────────────────────────────────────
-async function initPreloader() {
-    const preloader = document.getElementById('preloader');
-    const percentageText = document.getElementById('preloader-percentage');
-    const mainContent = document.getElementById('main-content');
-    const revealItems = document.querySelectorAll('.reveal-item');
-
-    document.body.classList.add('loading');
-
-    let percentage = 0;
-    const startTime = Date.now();
-    const minDuration = 2500;
-
-    // Start portfolio initialization immediately
-    const portfolioPromise = initPortfolio();
-    let interval;
-
-    // Support immediate exit on 404 or critical error
-    window.skipPreloader = () => {
-        if (interval) clearInterval(interval);
-        finishLoading(true);
-    };
-
-    // Flags to ensure items only reveal once
-    const revealed = {
-        navbar: false,
-        marquee: false,
-        hero: false
-    };
-
-    interval = setInterval(() => {
-        const increment = Math.max(1, Math.floor((100 - percentage) / 10));
-        percentage += increment;
-
-        // Progress-based falling reveal
-        if (percentage >= 20 && !revealed.navbar) {
-            revealItems[0]?.classList.add('show');
-            revealed.navbar = true;
-        }
-        if (percentage >= 50 && !revealed.marquee) {
-            revealItems[1]?.classList.add('show');
-            revealed.marquee = true;
-        }
-        if (percentage >= 80 && !revealed.hero) {
-            revealItems[2]?.classList.add('show');
-            revealed.hero = true;
-        }
-
-        if (percentage >= 99) {
-            percentage = 99;
-            clearInterval(interval);
-            finishLoading();
-        }
-
-        percentageText.innerText = `${percentage}%`;
-    }, 80);
-
-
-    async function finishLoading(isImmediate = false) {
-        await portfolioPromise;
-        const elapsedTime = Date.now() - startTime;
-        const remaining = isImmediate ? 0 : Math.max(0, minDuration - elapsedTime);
-
-        setTimeout(() => {
-            // Fade out preloader content (percentage)
-            const content = document.querySelector('.preloader-content');
-            if (content) content.classList.add('fade-out');
-
-            setTimeout(() => {
-                preloader.style.display = 'none';
-                document.body.classList.remove('loading');
-
-                // Ensure all items are shown if they weren't yet
-                revealItems.forEach(item => item.classList.add('show'));
-            }, isImmediate ? 0 : 800);
-        }, remaining);
-    }
-}
 
 // Initialize on Load
 document.addEventListener('DOMContentLoaded', () => {
-    // initPreloader(); 
     initPortfolio();
-    document.getElementById('preloader').style.display = 'none';
-    document.body.classList.remove('loading');
-    document.querySelectorAll('.reveal-item').forEach(item => item.classList.add('show'));
+
 
     // Language Switcher Logic
     const langToggle = document.getElementById('lang-toggle');

@@ -75,7 +75,7 @@ const PORTFOLIO_DATA = {
             navSkills: "Skills",
             navContact: "Contact",
             navHireMe: "HIRE ME",
-            marquee: "✦ CRAFTING DIGITAL EXPERIENCES ✦ FROM CODE TO PIXEL-PERFECT DESIGN ✦ LET'S BUILD SOMETHING AMAZING TOGETHER ✦ CRAFTING DIGITAL EXPERIENCES ✦ FROM CODE TO PIXEL-PERFECT DESIGN ✦ LET'S BUILD SOMETHING AMAZING TOGETHER ✦ CRAFTING DIGITAL EXPERIENCES ✦ FROM CODE TO PIXEL-PERFECT DESIGN ✦ LET'S BUILD SOMETHING AMAZING TOGETHER ✦",
+
             heroTitle: "HI <span class=\"highlight\">I'M A WEB DEV</span>",
             heroDesc: "A focused backend developer dedicated to building robust, scalable, and efficient server-side applications. Passionate about clean code, system architecture, and solving complex problems.",
             heroPrimaryBtn: "VIEW WORK",
@@ -111,7 +111,7 @@ const PORTFOLIO_DATA = {
             navSkills: "Keahlian",
             navContact: "Kontak",
             navHireMe: "REKRUT SAYA",
-            marquee: "✦ MENCIPTAKAN PENGALAMAN DIGITAL ✦ DARI KODE HINGGA DESAIN SEMPURNA ✦ MARI MEMBANGUN SESUATU YANG LUAR BIASA BERSAMA ✦ MENCIPTAKAN PENGALAMAN DIGITAL ✦ DARI KODE HINGGA DESAIN SEMPURNA ✦ MARI MEMBANGUN SESUATU YANG LUAR BIASA BERSAMA ✦ MENCIPTAKAN PENGALAMAN DIGITAL ✦ DARI KODE HINGGA DESAIN SEMPURNA ✦ MARI MEMBANGUN SESUATU YANG LUAR BIASA BERSAMA ✦",
+
             heroTitle: "HAI <span class=\"highlight\">SAYA WEB DEV</span>",
             heroDesc: "Seorang backend developer yang berdedikasi untuk membangun aplikasi sisi server yang kuat, skalabel, dan efisien. Memiliki semangat terhadap kode yang bersih, arsitektur sistem, dan memecahkan masalah yang kompleks.",
             heroPrimaryBtn: "LIHAT KARYA",
@@ -147,7 +147,7 @@ const PORTFOLIO_DATA = {
             navSkills: "技能",
             navContact: "联系",
             navHireMe: "雇用我",
-            marquee: "✦ 打造数字体验 ✦ 从代码到像素完美的设计 ✦ 让我们一起创造卓越 ✦ 打造数字体验 ✦ 从代码到像素完美的设计 ✦ 让我们一起创造卓越 ✦ 打造数字体验 ✦ 从代码到像素完美的设计 ✦ 让我们一起创造卓越 ✦",
+
             heroTitle: "嗨 <span class=\"highlight\">我是网页开发者</span>",
             heroDesc: "一位专注的后端开发人员，致力于构建健壮、可扩展和高效的服务器端应用程序。对清晰的代码、系统架构和解决复杂问题充满热情。",
             heroPrimaryBtn: "查看作品",
