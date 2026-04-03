@@ -603,11 +603,11 @@ window.addEventListener('scroll', () => {
 
     const isMobile = window.innerWidth <= 768;
     if (isMobile) {
-        leftPanel.style.transform = `translateY(-${curtainProgress * 100}%)`;
-        rightPanel.style.transform = `translateY(${curtainProgress * 100}%)`;
+        leftPanel.style.transform = `translate3d(0, -${curtainProgress * 100}%, 0)`;
+        rightPanel.style.transform = `translate3d(0, ${curtainProgress * 100}%, 0)`;
     } else {
-        leftPanel.style.transform = `translateX(-${curtainProgress * 100}%)`;
-        rightPanel.style.transform = `translateX(${curtainProgress * 100}%)`;
+        leftPanel.style.transform = `translate3d(-${curtainProgress * 100}%, 0, 0)`;
+        rightPanel.style.transform = `translate3d(${curtainProgress * 100}%, 0, 0)`;
     }
 
     const progressBar = document.querySelector('.scroll-progress-bar');
