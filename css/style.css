@@ -13,6 +13,8 @@
     --shadow-hover: 4px 4px 0px 0px var(--black);
 }
 
+body, html { overscroll-behavior-y: none; }
+
 * {
     margin: 0;
     padding: 0;
@@ -33,7 +35,7 @@ body {
 }
 
 /* Noise Texture Overlay */
-body::before {
+/* body::before {
     content: "";
     position: fixed;
     top: 0;
@@ -44,7 +46,7 @@ body::before {
     opacity: 0.1;
     pointer-events: none;
     z-index: 9998;
-}
+} */
 
 
 
@@ -235,9 +237,11 @@ body::before {
     display: flex;
     align-items: center;
     position: relative;
-    transition: transform 0.1s linear;
+    /* Removed transition because JS is already updating transform instantly on scroll */
+    /* transition: transform 0.1s linear; */
     pointer-events: all;
     border: var(--border);
+    will-change: transform;
 }
 
 .curtain-panel.left {
@@ -1306,6 +1310,8 @@ body::before {
         border-top: 2px solid var(--black);
         margin-bottom: 0;
         padding-bottom: env(safe-area-inset-bottom);
+        border-inline: none;
+        border-bottom: none;
         /* Ensure it goes behind address bar */
     }
 
