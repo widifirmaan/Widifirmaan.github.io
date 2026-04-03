@@ -13,6 +13,8 @@
     --shadow-hover: 4px 4px 0px 0px var(--black);
 }
 
+body, html { overscroll-behavior-y: none; }
+
 * {
     margin: 0;
     padding: 0;
@@ -235,9 +237,11 @@ body::before {
     display: flex;
     align-items: center;
     position: relative;
-    transition: transform 0.1s linear;
+    /* Removed transition because JS is already updating transform instantly on scroll */
+    /* transition: transform 0.1s linear; */
     pointer-events: all;
     border: var(--border);
+    will-change: transform;
 }
 
 .curtain-panel.left {
