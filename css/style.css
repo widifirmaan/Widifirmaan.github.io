@@ -1310,6 +1310,8 @@ body {
         border-top: 2px solid var(--black);
         margin-bottom: 0;
         padding-bottom: env(safe-area-inset-bottom);
+        border-inline: none;
+        border-bottom: none;
         /* Ensure it goes behind address bar */
     }
 
