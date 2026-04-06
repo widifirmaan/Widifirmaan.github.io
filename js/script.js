@@ -408,6 +408,7 @@ async function initPortfolio() {
                         });
                 }
 
+                if (window.loadMarked) window.loadMarked();
                 modal.style.display = 'block';
                 document.body.style.overflow = 'hidden'; // Prevent scroll
             });
