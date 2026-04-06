@@ -6,9 +6,9 @@ const urlsToCache = [
     './js/script.js',
     './1690163389614.jpeg',
     './favicon.png',
-    'https://cdn.jsdelivr.net/npm/marked/marked.min.js',
-    'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
-    'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg'
+    './icons/javascript.svg',
+    './icons/react.svg',
+    'https://cdn.jsdelivr.net/npm/marked/marked.min.js'
 ];
 
 self.addEventListener('install', e => {
