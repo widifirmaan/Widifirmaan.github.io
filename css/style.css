@@ -33,7 +33,14 @@ body {
     cursor: none;
     /* Custom cursor */
 }
+#preloader {
+  transition: opacity .4s ease, visibility .4s ease;
+}
 
+#preloader.loaded {
+  opacity: 0;
+  visibility: hidden;
+}
 /* Noise Texture Overlay */
 /* body::before {
     content: "";
