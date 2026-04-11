@@ -1,0 +1,8 @@
+# robots.txt — Widi Firmansyah Portfolio
+# https://widifirmaan.web.id
+
+User-agent: *
+Allow: /
+Disallow:
+
+Sitemap: https://widifirmaan.web.id/sitemap.xml
