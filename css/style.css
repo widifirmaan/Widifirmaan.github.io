@@ -275,14 +275,15 @@ body {
 }
 
 .hero h1 {
-    font-size: 5rem;
-    /* Adjusted from 6rem to fit one line comfortably */
-    line-height: 0.9;
+    font-size: clamp(2.5rem, 4vw, 4.5rem);
+    /* Adjusted to avoid overflow */
+    line-height: 1.1;
     font-weight: 900;
     margin-bottom: 20px;
     text-transform: uppercase;
     position: relative;
-    white-space: nowrap;
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 
@@ -1174,9 +1175,9 @@ body {
     }
 
     .hero h1 {
-        font-size: 3.5rem;
-        /* Adjusted from 4rem */
-        white-space: nowrap;
+        font-size: clamp(2rem, 4vw, 3.5rem);
+        /* Adjusted for tablet */
+        white-space: normal;
     }
 
     .hero p {
@@ -1260,10 +1261,9 @@ body {
     }
 
     .hero h1 {
-        font-size: 2.2rem;
-        /* Reduced from 2.8rem to fit one line */
-        white-space: nowrap;
-        /* Keep on one line */
+        font-size: clamp(1.8rem, 6vw, 2.5rem);
+        /* Set for mobile */
+        white-space: normal;
     }
 
     .hero p {
