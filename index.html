@@ -12,71 +12,10 @@
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=optional" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" as="image" href="1690163389614.jpeg" fetchpriority="high">
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap"></noscript>
-    <style>
-        :root{--bg:#F0F0F0;--primary:#FF5E5B;--secondary:#FFFF00;--accent:#00E5FF;--black:#000;--white:#FFF;--border:4px solid var(--black);--shadow:8px 8px 0 0 var(--black);--shadow-hover:4px 4px 0 0 var(--black)}
-        *,body,html{box-sizing:border-box;margin:0;padding:0}
-        html{scroll-behavior:smooth}
-        body{background-color:var(--bg);color:var(--black);overflow-x:hidden;cursor:none;font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:16px;line-height:1.5}
-        h1,h2,h3,h4,h5,h6{font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:clamp(1rem,2vw+1rem,5rem);line-height:1.1}
-        .custom-cursor{width:20px;height:20px;background-color:var(--primary);border:2px solid var(--black);position:fixed;pointer-events:none;z-index:9999;transition:transform .1s ease;mix-blend-mode:difference}
-        .navbar{display:flex;justify-content:space-between;align-items:center;padding:20px 5%;background:var(--white);border-bottom:var(--border);position:fixed;top:0;left:0;width:100%;height:70px;z-index:1000}
-        .nav-logo{font-weight:900;font-size:1.5rem;letter-spacing:-1px}
-        .nav-links{display:flex;list-style:none;gap:30px}
-        .nav-links a{text-decoration:none;color:var(--black);font-weight:700;text-transform:uppercase;transition:.2s}
-        .nav-cta{background:var(--secondary);border:var(--border);padding:10px 20px;font-weight:800;box-shadow:4px 4px 0 0 var(--black);transition:.2s;cursor:none}
-        .nav-cta:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 0 var(--black)}
-        .nav-actions{display:flex;align-items:center;gap:12px}
-        .lang-switcher{position:relative}
-        .lang-btn{background:var(--white);border:var(--border);padding:8px 16px;font-weight:800;font-size:.9rem;box-shadow:4px 4px 0 0 var(--black);transition:.2s;cursor:none;font-family:'Space Grotesk',sans-serif;letter-spacing:.5px}
-        .lang-btn:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 0 var(--black);background:var(--accent)}
-        .lang-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--white);border:var(--border);box-shadow:6px 6px 0 0 var(--black);z-index:1001;display:none;flex-direction:column;min-width:160px;overflow:hidden}
-        .lang-dropdown.active{display:flex;animation:dropdownSlide .2s ease-out}
-        @keyframes dropdownSlide{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-        .lang-dropdown button{background:var(--white);border:none;border-bottom:2px solid var(--black);padding:12px 18px;font-weight:700;font-size:.95rem;text-align:left;cursor:none;transition:.15s;font-family:'Space Grotesk',sans-serif}
-        .lang-dropdown button:last-child{border-bottom:none}
-        .lang-dropdown button:hover{background:var(--accent)}
-        .lang-dropdown button.lang-active{background:var(--secondary);font-weight:900}
-        #preloader{transition:opacity .4s ease,visibility .4s ease}
-        #preloader.loaded{opacity:0;visibility:hidden}
-        .hero{height:100vh;height:100dvh;min-height:-webkit-fill-available;width:100%;position:fixed;top:0;left:0;bottom:0;padding:0;margin:0;z-index:100;overflow:hidden;display:flex;pointer-events:none}
-        .curtain-panel{height:100%;width:50%;display:flex;align-items:center;position:relative;pointer-events:all;border:var(--border);will-change:transform}
-        .curtain-panel.left{background:var(--accent);padding:80px 10% 60px;z-index:2}
-        .curtain-panel.right{background:var(--accent);justify-content:center;padding-top:80px;border-left:2px solid var(--black);z-index:1}
-        .curtain-content{max-width:600px}
-        .hero h1{font-size:clamp(2rem,4vw,4rem);line-height:1.1;font-weight:900;margin-bottom:20px;text-transform:uppercase;position:relative;word-wrap:break-word;overflow:visible}
-        .highlight{background:var(--secondary);padding:0 10px;border:var(--border);filter:drop-shadow(8px 8px 0 var(--black));display:inline;margin:5px 0}
-        .hero p{font-size:1.5rem;max-width:600px;margin-bottom:40px;font-weight:500;background:var(--white);padding:10px;border:var(--border);box-shadow:6px 6px 0 0 var(--black)}
-        .hero-btns{display:flex;gap:20px}
-        .btn{text-decoration:none;padding:15px 30px;font-weight:800;border:var(--border);display:inline-block;box-shadow:var(--shadow);transition:.2s;font-size:1.1rem;color:var(--black)}
-        .btn:hover{transform:translate(4px,4px);box-shadow:var(--shadow-hover)}
-        .btn-primary{background:var(--primary)}
-        .btn-secondary{background:var(--white)}
-        .hero-visual{flex:1;display:flex;justify-content:center;align-items:center;position:relative;height:100%}
-        .shape{position:absolute;border:var(--border);transition:.1s ease-out;display:flex;justify-content:center;align-items:center;padding:20px;overflow:hidden}
-        .shape img{width:60%;height:60%;object-fit:contain;filter:drop-shadow(4px 4px 0 var(--black))}
-        .shape-1{width:350px;height:350px;background:var(--primary);transform:rotate(15deg);z-index:1;--rot:15deg;animation:float 6s ease-in-out infinite;top:20%}
-        .shape-2{width:280px;height:280px;background:var(--secondary);transform:rotate(-10deg);z-index:3;--rot:-10deg;animation:float 8s ease-in-out infinite reverse;bottom:20%}
-        .shape-3{width:220px;height:220px;background:var(--white);transform:rotate(45deg);z-index:2;--rot:45deg;animation:float 10s ease-in-out infinite;right:10%}
-        .shape-1 img{width:350px;height:350px;object-fit:cover}
-        .shape-2 img,.shape-3 img{transform:rotate(10deg);width:280px;height:280px}
-        .shape-3 img{transform:rotate(-45deg)}
-        @keyframes float{0%,100%{transform:translateY(0) rotate(var(--rot,15deg))}50%{transform:translateY(-20px) rotate(calc(var(--rot,15deg) + 5deg))}}
-        .curtain-info{position:absolute;bottom:50px;font-weight:900;background:var(--white);padding:10px 20px;border:var(--border);animation:bounce 2s infinite}
-        @keyframes bounce{0%,20%,50%,80%,100%{transform:translateY(0)}40%{transform:translateY(-10px)}60%{transform:translateY(-5px)}}
-        .scroll-progress-container{position:fixed;right:50px;top:50%;transform:translateY(-50%);width:20px;height:300px;background:var(--white);border:var(--border);box-shadow:4px 4px 0 0 var(--black);z-index:1000;display:flex;flex-direction:column;justify-content:flex-start}
-        .scroll-progress-bar{width:100%;height:0;background:var(--primary);transition:height .1s linear}
-        .reveal{opacity:0;transition:all .8s cubic-bezier(.17,.67,.83,.67)}
-        .reveal.active{opacity:1;transform:translate(0) skewX(0) scale(1)!important}
-        .hero,.curtain-panel,.navbar,.custom-cursor,.scroll-progress-container{contain:layout}
-        .hero-content{min-height:300px}
-        .hero h1,.hero p{contain:content}
-        @media(max-width:1024px){.hero h1{font-size:clamp(1.8rem,5vw,3rem)}.hero p{font-size:1.1rem;margin-bottom:30px}.curtain-panel.left{padding-left:5%}.hamburger{display:flex}.nav-links{display:none;position:absolute;top:100%;left:0;width:100%;background:var(--white);border-bottom:var(--border);box-shadow:0 8px 0 0 var(--black);flex-direction:column;gap:0;padding:0;z-index:999}.nav-links.active{display:flex;animation:menuSlideDown .3s ease-out}@keyframes menuSlideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}.nav-links li{border-bottom:2px solid var(--black)}.nav-links li:last-child{border-bottom:none}.nav-links a{display:block;padding:18px 30px;font-size:1.1rem;transition:.15s}.nav-links a:hover{background:var(--accent);text-decoration:none}}
-        @media(max-width:768px){.scroll-progress-container{display:none}.section{padding:60px 8%;border-bottom:4px solid var(--black)}.hero h1{font-size:clamp(1.4rem,6vw,2.2rem)}.hero p{font-size:1rem;margin-bottom:20px;box-shadow:4px 4px 0 0 var(--black)}.hero-btns{flex-direction:column;gap:15px}.btn{padding:16px 24px;font-size:1rem;width:100%;text-align:center;min-height:48px;display:flex;align-items:center;justify-content:center}.hero{flex-direction:column}.curtain-panel.left{width:100%!important;height:70%!important;padding:calc(100px + env(safe-area-inset-top)) 5% 40px;border-right:none;border-bottom:2px solid var(--black);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}.curtain-panel.right{width:100%!important;height:30%!important;padding-top:0;border-left:none;border-top:2px solid var(--black);padding-bottom:env(safe-area-inset-bottom);border-inline:none;border-bottom:none}.hero-visual{transform:scale(.5)}.section-title{font-size:2rem}.nav-actions{gap:12px;align-items:stretch}.lang-btn,.nav-cta{height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;padding:0 14px;font-size:.9rem;margin:0}.lang-btn{box-shadow:3px 3px 0 0 var(--black)}.nav-cta{padding:0 18px}.hamburger{box-shadow:3px 3px 0 0 var(--black);min-height:44px;min-width:44px;padding:10px}.hamburger span{height:3px}.nav-links a{padding:16px 20px;font-size:1rem;min-height:48px;display:flex;align-items:center}.navbar{height:auto;padding:calc(20px + env(safe-area-inset-top)) 5% 20px;align-items:center;background:#fff!important;opacity:1!important}.navbar{z-index:5}.curtain-panel.left,.curtain-panel.right{z-index:10}}
-    </style>
-    <link rel="stylesheet" href="css/style.css" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="css/style.css"></noscript>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
@@ -124,11 +63,11 @@
         <header class="hero">
             <div class="curtain-panel left">
                 <div class="curtain-content" id="hero-content">
-                    <h1 class="reveal active">HI <span class="highlight">I'M A WEB DEV</span></h1>
-                    <p class="reveal active">A focused backend developer dedicated to building robust, scalable, and efficient server-side applications. Passionate about clean code, system architecture, and solving complex problems.</p>
+                    <h1 class="reveal active" data-i18n="heroTitle">HI <span class="highlight">I'M A WEB DEV</span></h1>
+                    <p class="reveal active" data-i18n="heroDesc">A focused backend developer dedicated to building robust, scalable, and efficient server-side applications. Passionate about clean code, system architecture, and solving complex problems.</p>
                     <div class="hero-btns">
-                        <a href="#projects" class="btn btn-primary">VIEW WORK</a>
-                        <a href="#contact" class="btn btn-secondary">SAY HELLO</a>
+                        <a href="#projects" class="btn btn-primary" data-i18n="heroPrimaryBtn">VIEW WORK</a>
+                        <a href="#contact" class="btn btn-secondary" data-i18n="heroSecondaryBtn">SAY HELLO</a>
                     </div>
                 </div>
             </div>
@@ -151,16 +90,23 @@
         <div class="scroll-trigger"></div>
 
         <section id="about" class="section about">
-            <h2 class="section-title reveal" id="about-title"></h2>
+            <h2 class="section-title reveal" id="about-title" data-i18n="aboutTitle">ABOUT ME</h2>
             <div class="about-grid" id="about-grid">
-                <!-- Data from JSON -->
+                <div class="about-card reveal">
+                    <h3 data-i18n="aboutStoryTitle">THE STORY</h3>
+                    <p data-i18n="aboutStoryContent">I transform complex problems into elegant, high-impact digital solutions. With a focus on performance and raw aesthetic, I push the boundaries of what's possible on the web.</p>
+                </div>
+                <div class="about-card reveal">
+                    <h3 data-i18n="aboutProfileTitle">PROFILE</h3>
+                    <p data-i18n="aboutProfileContent">Based in D.I Yogyakarta, I bring a strong set of soft skills including Teamwork, Communication, Creativity, and Commitment. I am proficient in both Indonesia and English.</p>
+                </div>
             </div>
         </section>
 
         <div class="projects-scroll-outer" id="projects-scroll-outer">
             <div class="projects-scroll-sticky">
                 <section id="projects" class="section projects">
-                    <h2 class="section-title reveal" id="projects-title"></h2>
+                    <h2 class="section-title reveal" id="projects-title" data-i18n="projectsTitle">PROJECTS</h2>
                 </section>
                 <div class="projects-track-wrapper">
                     <div class="project-grid" id="project-grid">
@@ -171,16 +117,81 @@
         </div>
 
         <section id="experience" class="section experience">
-            <h2 class="section-title reveal" id="experience-title"></h2>
+            <h2 class="section-title reveal" id="experience-title" data-i18n="experienceTitle">WORK EXPERIENCE</h2>
             <div class="experience-timeline" id="experience-timeline">
-                <!-- Data from JSON -->
+                <div class="experience-item reveal">
+                    <div class="exp-header">
+                        <div class="exp-role-company">
+                            <h3>Fullstack Web Developer</h3>
+                            <h4>PT. Indonesia Financial Group (IFGLife)</h4>
+                        </div>
+                        <span class="exp-duration">Oct 2022 - Dec 2025</span>
+                    </div>
+                    <div class="exp-body">
+                        <ul>
+                            <li>Developing, enhancment, maintenance internal Apps with team.</li>
+                            <li>Setting up new product.</li>
+                            <li>Migrating Legacy Apps to new Apps.</li>
+                        </ul>
+                        <div class="exp-tech">
+                            <strong>Tech:</strong> Codeigniter, Native PHP, Java Quarkus, Bootstrap, HTML, CSS, JS. DBMS: Oracle, MySQL.
+                        </div>
+                    </div>
+                </div>
+                <div class="experience-item reveal">
+                    <div class="exp-header">
+                        <div class="exp-role-company">
+                            <h3>Fullstack Web Developer</h3>
+                            <h4>PT. KOMURI Geekgarden</h4>
+                        </div>
+                        <span class="exp-duration">Maret 2021 - Maret 2022</span>
+                    </div>
+                    <div class="exp-body">
+                        <ul>
+                            <li>Developing client order Apps/Website with team.</li>
+                            <li>Enhancment, and maintenance Geekgarden internal apps, and products.</li>
+                        </ul>
+                        <div class="exp-tech">
+                            <strong>Tech:</strong> Laravel, Codeigniter, Native PHP, Wordpress, Bootstrap, JS. DBMS: MySQL.
+                        </div>
+                    </div>
+                </div>
+                <div class="experience-item reveal">
+                    <div class="exp-header">
+                        <div class="exp-role-company">
+                            <h3>Web Developer</h3>
+                            <h4>Aruna Picture</h4>
+                        </div>
+                        <span class="exp-duration">2018 - Maret 2020</span>
+                    </div>
+                    <div class="exp-body">
+                        <ul>
+                            <li>Developing, manage, and maintenance internal website</li>
+                            <li>Create Wedding Invitation web based (wordpress).</li>
+                            <li>Make Report</li>
+                        </ul>
+                        <div class="exp-tech">
+                            <strong>Tech:</strong> Codeigniter, Wordpress, Bootstrap. DBMS: MySQL.
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
         <section id="skills" class="section skills">
-            <h2 class="section-title reveal" id="skills-title"></h2>
+            <h2 class="section-title reveal" id="skills-title" data-i18n="skillsTitle">SKILLS</h2>
             <div class="skills-container reveal" id="skills-container">
-                <!-- Data from JSON -->
+                <div class="skill-tag">Springboot</div>
+                <div class="skill-tag">React</div>
+                <div class="skill-tag">Next.js</div>
+                <div class="skill-tag">Node.js</div>
+                <div class="skill-tag">Tailwind</div>
+                <div class="skill-tag">Laravel</div>
+                <div class="skill-tag">Codeigniter</div>
+                <div class="skill-tag">PostgreSQL</div>
+                <div class="skill-tag">Oracle</div>
+                <div class="skill-tag">mySQL</div>
+                <div class="skill-tag">MongoDB</div>
             </div>
         </section>
 
@@ -226,18 +237,6 @@
 
     <script src="js/data.js"></script>
     <script src="js/script.js" defer></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').catch(() => {});
-        }
-        window.loadMarked = function() {
-            if (typeof marked === 'undefined') {
-                var s = document.createElement('script');
-                s.src = 'https://cdn.jsdelivr.net/npm/marked/marked.min.js';
-                document.head.appendChild(s);
-            }
-        };
-    </script>
 </body>
 
 </html>

@@ -1,11 +1,10 @@
 // preloader
 
-window.addEventListener('load', () => {
+window.addEventListener('DOMContentLoaded', () => {
   const preloader = document.getElementById('preloader');
-
-  setTimeout(() => {
-    preloader.classList.add('loaded');
-  }, 500);
+  if (preloader) {
+      preloader.classList.add('loaded');
+  }
 });
 
 
@@ -26,7 +25,7 @@ function setLanguage(lang) {
         const key = el.getAttribute('data-i18n');
         const translation = t(key);
         if (translation) {
-            el.textContent = translation;
+            el.innerHTML = translation;
         }
     });
 
@@ -49,63 +48,15 @@ function setLanguage(lang) {
         btn.classList.toggle('lang-active', btn.getAttribute('data-lang') === lang);
     });
 
-    // Re-render dynamic content
-    renderDynamicContent();
+    // Update dynamic text elements that aren't strictly static data-i18n
+    updateDynamicTexts();
 }
 
-function renderDynamicContent() {
-    const data = PORTFOLIO_DATA;
-
-    // Re-render Hero
-    const heroContainer = document.getElementById('hero-content');
-    if (heroContainer) {
-        heroContainer.innerHTML = `
-            <h1 class="reveal active">${t('heroTitle')}</h1>
-            <p class="reveal active">${t('heroDesc')}</p>
-            <div class="hero-btns">
-                <a href="#projects" class="btn btn-primary">${t('heroPrimaryBtn')}</a>
-                <a href="#contact" class="btn btn-secondary">${t('heroSecondaryBtn')}</a>
-            </div>
-        `;
-    }
-
-    // Re-render About
-    document.getElementById('about-title').innerText = t('aboutTitle');
-    const aboutGrid = document.getElementById('about-grid');
-    if (aboutGrid) {
-        aboutGrid.innerHTML = '';
-        const aboutCards = [
-            { titleKey: 'aboutStoryTitle', contentKey: 'aboutStoryContent' },
-            { titleKey: 'aboutProfileTitle', contentKey: 'aboutProfileContent' }
-        ];
-        aboutCards.forEach(card => {
-            const cardEl = document.createElement('div');
-            cardEl.className = 'about-card reveal active';
-            cardEl.innerHTML = `
-                <h3>${t(card.titleKey)}</h3>
-                <p>${t(card.contentKey)}</p>
-            `;
-            aboutGrid.appendChild(cardEl);
-        });
-    }
-
-    // Re-render Experience title
-    if (data.experience) {
-        document.getElementById('experience-title').innerText = t('experienceTitle');
-    }
-
-    // Re-render Skills title
-    document.getElementById('skills-title').innerText = t('skillsTitle');
-
-    // Re-render Projects title
-    document.getElementById('projects-title').innerText = t('projectsTitle');
-
-    // Update view details buttons
+function updateDynamicTexts() {
+    // Re-render Projects title that might have been dynamically inserted or handled
     document.querySelectorAll('.project-btn').forEach(btn => {
         btn.textContent = t('viewDetails');
     });
-
-    refreshDynamicEvents();
 }
 
 // ─── Utility: Image Optimization ───────────────────────────────────────────
@@ -123,129 +74,59 @@ async function initPortfolio() {
     try {
         const data = PORTFOLIO_DATA;
 
-        // Populate Hero
-        const heroContainer = document.getElementById('hero-content');
-        if (heroContainer) {
-            heroContainer.innerHTML = `
-                <h1 class="reveal">${t('heroTitle')}</h1>
-                <p class="reveal">${t('heroDesc')}</p>
-                <div class="hero-btns">
-                    <a href="#projects" class="btn btn-primary">${t('heroPrimaryBtn')}</a>
-                    <a href="#contact" class="btn btn-secondary">${t('heroSecondaryBtn')}</a>
-                </div>
-            `;
-        }
-
-        // Populate About
-        const aboutTitle = document.getElementById('about-title');
-        if (aboutTitle) aboutTitle.innerText = t('aboutTitle');
-
-        const aboutGrid = document.getElementById('about-grid');
-        if (aboutGrid && data.about) {
-            const aboutCards = [
-                { titleKey: 'aboutStoryTitle', contentKey: 'aboutStoryContent' },
-                { titleKey: 'aboutProfileTitle', contentKey: 'aboutProfileContent' }
-            ];
-            aboutGrid.innerHTML = '';
-            aboutCards.forEach(card => {
-                const cardEl = document.createElement('div');
-                cardEl.className = 'about-card reveal';
-                cardEl.innerHTML = `
-                    <h3>${t(card.titleKey)}</h3>
-                    <p>${t(card.contentKey)}</p>
-                `;
-                aboutGrid.appendChild(cardEl);
-            });
-        }
-
-        // Populate Experience
-        if (data.experience) {
-            const expTitle = document.getElementById('experience-title');
-            if (expTitle) expTitle.innerText = t('experienceTitle');
-
-            const experienceTimeline = document.getElementById('experience-timeline');
-            if (experienceTimeline) {
-                experienceTimeline.innerHTML = '';
-                data.experience.items.forEach((exp, idx) => {
-                    const expEl = document.createElement('div');
-                    expEl.className = 'experience-item reveal';
-                    expEl.innerHTML = `
-
-                        <div class="exp-header">
-                            <div class="exp-role-company">
-                                <h3>${exp.role}</h3>
-                                <h4>${exp.company}</h4>
-                            </div>
-                            <span class="exp-duration">${exp.duration}</span>
-                        </div>
-                        <div class="exp-body">
-                            <ul>
-                                ${exp.description.map(desc => `<li>${desc}</li>`).join('')}
-                            </ul>
-                            <div class="exp-tech">
-                                <strong>Tech:</strong> ${exp.tech_stack}
-                            </div>
-                        </div>
-                    `;
-                    experienceTimeline.appendChild(expEl);
-                });
-            }
-        }
-
-        // Populate Skills
-        if (data.skills) {
-            const skillsTitle = document.getElementById('skills-title');
-            if (skillsTitle) skillsTitle.innerText = t('skillsTitle');
-
-            const skillsContainer = document.getElementById('skills-container');
-            if (skillsContainer) {
-                skillsContainer.innerHTML = '';
-                data.skills.list.forEach(skill => {
-                    const skillEl = document.createElement('div');
-                    skillEl.className = 'skill-tag';
-                    skillEl.innerText = skill;
-                    skillsContainer.appendChild(skillEl);
-                });
-            }
-        }
+        // Static sections are now hardcoded in HTML and translated via i18n data attributes.
 
 
 
-        // Fetch GitHub Projects dynamically
+        // Fetch GitHub Projects dynamically with localStorage caching
+        const CACHE_KEY = 'portfolioGithubData';
+        const CACHE_TIME = 24 * 60 * 60 * 1000; // 24 hours
+        let cachedData = null;
+
         try {
-            const githubRes = await fetch('https://api.github.com/users/widifirmaan/repos?sort=updated&type=owner&per_page=100');
-            if (githubRes.status === 404) {
-                return;
-            }
-            if (githubRes.ok) {
-                const repos = await githubRes.json();
-                const colors = ['#00E5FF', '#FF5E5B', '#FFFF00', '#FFC0CB', '#00FF00', '#FFFFFF'];
-                const excludeRepos = ['widifirmaan.github.io', 'nextjs-telefish', 'bash-android-aio-bypass-kit', 'clover-asus-vivobookflip-tp410ua'];
-
-                // Exclude specific unwanted repos and forks
-                data.projects.list = repos.filter(repo => !repo.fork && !excludeRepos.includes(repo.name.toLowerCase())).map((repo, idx) => {
-                    const color = colors[idx % colors.length];
-                    let techList = repo.language || 'Multiple Technologies';
-                    if (repo.topics && repo.topics.length > 0) {
-                        techList = repo.topics.join(', ');
-                    }
-
-                    return {
-                        title: repo.name.replace(/[-_]/g, ' '),
-                        tech: techList,
-                        color: color,
-                        repo: repo.full_name,
-                        branch: repo.default_branch || 'main',
-                        // OPTIMIZED: Wrap OpenGraph image in proxy
-                        images: [optimizeImageUrl(`https://opengraph.githubassets.com/1/${repo.full_name}`)],
-                        description: repo.description || 'No description available for this repository.',
-                        link: repo.homepage && repo.homepage !== "" ? repo.homepage : repo.html_url
-                    };
-                });
+            const cachedString = localStorage.getItem(CACHE_KEY);
+            if (cachedString) {
+                const parsed = JSON.parse(cachedString);
+                if (Date.now() - parsed.timestamp < CACHE_TIME) {
+                    cachedData = parsed.data;
+                }
             }
         } catch (e) {
-            console.error('Error fetching GitHub repos:', e);
-            // Will fallback to data.js projects if fetch fails
+            console.error('Error reading cache:', e);
+        }
+
+        if (cachedData) {
+            data.projects.list = cachedData;
+        } else {
+            try {
+                const githubRes = await fetch('https://api.github.com/users/widifirmaan/repos?sort=updated&type=owner&per_page=30'); // Reduced to 30 for perf
+                if (githubRes.ok) {
+                    const repos = await githubRes.json();
+                    const colors = ['#00E5FF', '#FF5E5B', '#FFFF00', '#FFC0CB', '#00FF00', '#FFFFFF'];
+                    const excludeRepos = ['widifirmaan.github.io', 'nextjs-telefish', 'bash-android-aio-bypass-kit', 'clover-asus-vivobookflip-tp410ua'];
+
+                    data.projects.list = repos.filter(repo => !repo.fork && !excludeRepos.includes(repo.name.toLowerCase())).map((repo, idx) => {
+                        const color = colors[idx % colors.length];
+                        let techList = repo.language || 'Multiple Technologies';
+                        if (repo.topics && repo.topics.length > 0) {
+                            techList = repo.topics.join(', ');
+                        }
+
+                        return {
+                            title: repo.name.replace(/[-_]/g, ' '),
+                            tech: techList,
+                            color: color,
+                            repo: repo.full_name,
+                            branch: repo.default_branch || 'main',
+                            images: [optimizeImageUrl(`https://opengraph.githubassets.com/1/${repo.full_name}`)],
+                            description: repo.description || 'No description available for this repository.',
+                            link: repo.homepage && repo.homepage !== "" ? repo.homepage : repo.html_url
+                        };
+                    });
+                }
+            } catch (e) {
+                console.error('Error fetching GitHub repos:', e);
+            }
         }
 
 
@@ -257,7 +138,7 @@ async function initPortfolio() {
             projectEl.className = 'project-card reveal';
             projectEl.innerHTML = `
                 <div class="project-image" id="project-image-${index}" style="background-color: ${project.color};">
-                    ${project.images && project.images.length > 0 ? `<img src="${project.images[0]}" alt="${project.title}" style="width:100%; height:100%; object-fit:cover;">` : ''}
+                    ${project.images && project.images.length > 0 ? `<img src="${project.images[0]}" alt="${project.title}" loading="lazy" style="width:100%; height:100%; object-fit:cover;">` : ''}
                 </div>
                 <div class="project-info">
                     <h3>${project.title.toUpperCase()}</h3>
@@ -271,60 +152,96 @@ async function initPortfolio() {
         // Use requestAnimationFrame so browser has painted before we measure widths
         requestAnimationFrame(() => setupHorizontalScroll());
 
-        // Fetch READMEs for thumbnails and PRELOAD them
-        const readmePromises = data.projects.list.map(async (p, idx) => {
-            if (!p.repo) return;
+        // Only fetch READMEs if not working from cache
+        if (!cachedData) {
+            const readmePromises = data.projects.list.map(async (p, idx) => {
+                if (!p.repo) return;
+                try {
+                    const response = await fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/README.md`)
+                        .then(res => res.ok ? res : fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/Readme.md`))
+                        .then(res => res.ok ? res : fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/readme.md`));
+
+                    if (!response.ok) throw new Error('README not found');
+                    const text = await response.text();
+
+                    const imgRegex = /!\[.*?\]\(((?:[^)(]+|\([^)(]*\))+)\)|<img.*?src=["'](.*?)["']/g;
+                    let images = [];
+                    let match;
+                    let count = 0;
+                    while ((match = imgRegex.exec(text)) !== null && count < 8) {
+                        let url = match[1] || match[2];
+                        if (url && !url.includes('shields.io') && !url.includes('badge')) {
+                            if (!url.startsWith('http')) {
+                                url = `https://raw.githubusercontent.com/${p.repo}/${p.branch}/${url.replace(/^\.\//, '')}`;
+                            }
+                            images.push(optimizeImageUrl(url));
+                            count++;
+                        }
+                    }
+
+                    images = [...new Set(images)];
+
+                    if (images.length > 0) {
+                        // Ensure the primary OpenGraph image remains if available
+                        const ogImage = p.images && p.images[0] ? p.images[0] : null;
+                        p.images = ogImage ? [ogImage, ...images] : images;
+                        
+                        const imgContainer = document.getElementById(`project-image-${idx}`);
+                        if (imgContainer) {
+                            let gridClass = 'project-image-grid-1';
+                            if (p.images.length === 2) gridClass = 'project-image-grid-2';
+                            else if (p.images.length === 3) gridClass = 'project-image-grid-3';
+                            else if (p.images.length >= 4) gridClass = 'project-image-grid-4';
+
+                            imgContainer.className = `project-image project-image-grid ${gridClass}`;
+                            imgContainer.style.backgroundColor = 'var(--black)';
+
+                            const numImages = Math.min(p.images.length, 4);
+                            let html = '';
+                            for (let i = 0; i < numImages; i++) {
+                                html += `<img src="${p.images[i]}" alt="${p.title}" loading="lazy">`;
+                            }
+                            imgContainer.innerHTML = html;
+                        }
+                    }
+                } catch (err) {
+                    // Silently fail if README not found
+                }
+            });
+
+            await Promise.all(readmePromises);
+            
+            // Save to cache
             try {
-                const response = await fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/README.md`)
-                    .then(res => res.ok ? res : fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/Readme.md`))
-                    .then(res => res.ok ? res : fetch(`https://raw.githubusercontent.com/${p.repo}/${p.branch}/readme.md`));
-
-                if (!response.ok) throw new Error('README not found');
-                const text = await response.text();
-
-                const imgRegex = /!\[.*?\]\(((?:[^)(]+|\([^)(]*\))+)\)|<img.*?src=["'](.*?)["']/g;
-                let images = [];
-                let match;
-                while ((match = imgRegex.exec(text)) !== null) {
-                    let url = match[1] || match[2];
-                    if (url && !url.includes('shields.io') && !url.includes('badge')) {
-                        if (!url.startsWith('http')) {
-                            url = `https://raw.githubusercontent.com/${p.repo}/${p.branch}/${url.replace(/^\.\//, '')}`;
-                        }
-                        images.push(optimizeImageUrl(url));
-                    }
-                }
-
-                // Remove duplicates
-                images = [...new Set(images)];
-
-                if (images.length > 0) {
-                    p.images = images;
-                    const imgContainer = document.getElementById(`project-image-${idx}`);
-                    if (imgContainer) {
-                        let gridClass = 'project-image-grid-1';
-                        if (images.length === 2) gridClass = 'project-image-grid-2';
-                        else if (images.length === 3) gridClass = 'project-image-grid-3';
-                        else if (images.length >= 4) gridClass = 'project-image-grid-4';
-
-                        imgContainer.className = `project-image project-image-grid ${gridClass}`;
-                        imgContainer.style.backgroundColor = 'var(--black)';
-
-                        const numImages = Math.min(images.length, 4);
-                        let html = '';
-                        for (let i = 0; i < numImages; i++) {
-                            html += `<img src="${images[i]}" alt="${p.title}">`;
-                        }
-                        imgContainer.innerHTML = html;
-                    }
-                }
-            } catch (err) {
-                // Silently fail if README not found
+                localStorage.setItem(CACHE_KEY, JSON.stringify({
+                    timestamp: Date.now(),
+                    data: data.projects.list
+                }));
+            } catch (e) {
+                console.warn('Could not cache github data:', e);
             }
-        });
+        } else {
+            // Apply loaded cached images to DOM
+            data.projects.list.forEach((p, idx) => {
+                const imgContainer = document.getElementById(`project-image-${idx}`);
+                if (imgContainer && p.images && p.images.length > 1) {
+                    let gridClass = 'project-image-grid-1';
+                    if (p.images.length === 2) gridClass = 'project-image-grid-2';
+                    else if (p.images.length === 3) gridClass = 'project-image-grid-3';
+                    else if (p.images.length >= 4) gridClass = 'project-image-grid-4';
 
-        // Wait for all README lookups
-        await Promise.all(readmePromises);
+                    imgContainer.className = `project-image project-image-grid ${gridClass}`;
+                    imgContainer.style.backgroundColor = 'var(--black)';
+
+                    const numImages = Math.min(p.images.length, 4);
+                    let html = '';
+                    for (let i = 0; i < numImages; i++) {
+                        html += `<img src="${p.images[i]}" alt="${p.title}" loading="lazy">`;
+                    }
+                    imgContainer.innerHTML = html;
+                }
+            });
+        }
 
         // EXTRA: Preload all final image URLs to ensure they are in browser cache
         const allImageUrls = data.projects.list.flatMap(p => p.images || []);
@@ -743,3 +660,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Service Worker Registration
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+}
+
+// Marked.js Dynamic Loader
+window.loadMarked = function() {
+    if (typeof marked === 'undefined') {
+        var s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/marked/marked.min.js';
+        document.head.appendChild(s);
+    }
+};
